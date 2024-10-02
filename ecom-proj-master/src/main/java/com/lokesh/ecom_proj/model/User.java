@@ -20,4 +20,10 @@ public class User {
     private String password;
     private String mailId;
     private List<CartItem> cart = new ArrayList<>();
+
+
+    // Fields for storing the profile image
+    private String imageName;     // The name of the image file
+    private String imageType;     // The type of the image (e.g., "image/jpeg", "image/png")
+    private byte[] imageData;     // The binary data of the image
 }

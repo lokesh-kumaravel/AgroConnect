@@ -1,7 +1,10 @@
 import react, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const Register = () => 
 {
+    
+    const navigate = useNavigate();
     const [id,setId] = useState("");
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
@@ -31,6 +34,7 @@ const Register = () =>
             {
                 const registeredUser = await response.json();
                 console.log("User registered successfully", registeredUser);
+                navigate("/login");
             }
             else{
                 console.log("Registration Failed");
