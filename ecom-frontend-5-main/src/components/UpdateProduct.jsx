@@ -26,7 +26,7 @@ const UpdateProduct = () => {
         );
 
         setProduct(response.data);
-      
+        console.log(response.data)
         const responseImage = await axios.get(
           `http://localhost:8080/api/product/${id}/image`,
           { responseType: "blob" }
@@ -53,40 +53,78 @@ const UpdateProduct = () => {
     return file;
   }
  
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("images", image)
-    console.log("productsdfsfsf", updateProduct)
+  
     const updatedProduct = new FormData();
     updatedProduct.append("imageFile", image);
+  
+    // Ensure stockQuantity is a number
+    const productData = {
+      ...updateProduct,
+      stockQuantity: Number(updateProduct.stockQuantity), // Convert to number
+    };
+  
     updatedProduct.append(
       "product",
-      new Blob([JSON.stringify(updateProduct)], { type: "application/json" })
+      new Blob([JSON.stringify(productData)], { type: "application/json" })
     );
-    var userid = localStorage.getItem('currentuser')
-    updatedProduct.append("currentuserid",userid);
+  
+    const userid = localStorage.getItem('currentuser');
+    updatedProduct.append("currentuserid", userid);
+  
+    const token = localStorage.getItem('jwt');
+    
+    try {
+      const response = await axios.put(`http://localhost:8080/api/product/${id}`, updatedProduct, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: 'Bearer ' + token,
+        },
+      });
+      console.log("Product updated successfully:", response.data);
+      console.log(productData);
+      alert("Product updated successfully!");
+    } catch (error) {
+      console.error("Error updating product:", error);
+      alert("Failed to update product. Please try again.");
+    }
+  };
+  
+  // const handleSubmit = async(e) => {
+  //   e.preventDefault();
+  //   console.log("images", image)
+  //   console.log("productsdfsfsf", updateProduct)
+  //   const updatedProduct = new FormData();
+  //   updatedProduct.append("imageFile", image);
+  //   updatedProduct.append(
+  //     "product",
+  //     new Blob([JSON.stringify(updateProduct)], { type: "application/json" })
+  //   );
+  //   var userid = localStorage.getItem('currentuser')
+  //   updatedProduct.append("currentuserid",userid);
   
 
     
-    var token = localStorage.getItem('jwt')
-  console.log("formData : ", updatedProduct)
-    axios
-      .put(`http://localhost:8080/api/product/${id}`, updatedProduct, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          'Authorization': 'Bearer ' + token,
-        },
-      })
-      .then((response) => {
-        console.log("Product updated successfully:", updatedProduct);
-        alert("Product updated successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating product:", error);
-        console.log("product unsuccessfull update",updateProduct)
-        alert("Failed to update product. Please try again.");
-      });
-  };
+  //   var token = localStorage.getItem('jwt')
+  // console.log("formData : ", updatedProduct)
+  //   axios
+  //     .put(`http://localhost:8080/api/product/${id}`, updatedProduct, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         'Authorization': 'Bearer ' + token,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log("Product updated successfully:", updatedProduct);
+  //       alert("Product updated successfully!");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error updating product:", error);
+  //       console.log("product unsuccessfull update",updateProduct)
+  //       alert("Failed to update product. Please try again.");
+  //     });
+  // };
  
 
   const handleChange = (e) => {

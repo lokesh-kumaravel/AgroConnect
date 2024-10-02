@@ -25,7 +25,15 @@ const Home = ({ selectedCategory }) => {
   if (response.ok) {
       const userDetails = await response.json();
       console.log(userDetails)
-      addToCart(product); // If token exists, add to cart
+      const res = await addToCart(product); // If token exists, add to cart
+      if(res)
+      {
+        alert("Productadd to cart!")
+      }
+      else
+      {
+        alert("Out of Stock!")
+      }
       // Proceed to load dashboard or set user state
   } else {
       // Handle invalid token case

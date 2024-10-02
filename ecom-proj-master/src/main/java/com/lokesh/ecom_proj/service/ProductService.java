@@ -50,6 +50,12 @@ public class ProductService {
             existingProduct.setBrand(product.getBrand());
             existingProduct.setCategory(product.getCategory());
             existingProduct.setPrice(product.getPrice());
+            existingProduct.setStockQuantity(product.getStockQuantity());
+            existingProduct.setProductAvailable(product.isProductAvailable());
+            if(!product.isProductAvailable())
+            {
+                existingProduct.setStockQuantity(0);
+            }
             return repo.save(existingProduct);
         }
         return null;  // Or throw an exception if not found
@@ -65,7 +71,7 @@ public class ProductService {
     public List<Product> getProductsByUserId(String userId) {
         List<Product> result = repo.findByUserId(userId);
         if(result == null || result.isEmpty()) {
-            System.out.println("No products found for userId: " + userId);
+            // System.out.println("No products found for userId: " + userId);
         } 
         return result;
     }

@@ -52,10 +52,70 @@ const Product = () => {
     navigate(`/product/update/${id}`);
   };
 
-  const handleAddToCart = () => {
-    addToCart(product);
-    alert("Product added to cart");
-  };
+  const handleAddToCart = async (productId, product) => {
+    const token = localStorage.getItem('jwt');
+    if (!token) return alert("User not logged in");
+
+    try {
+        const productResponse = await axios.get(`http://localhost:8080/users/quantity/${productId}/cart`);
+        const availableQuantity = productResponse.data;
+
+        const userCartResponse = await axios.get(`http://localhost:8080/users/currentquantity/${userId}/${productId}/cart`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const cartQuantity = userCartResponse.data;
+
+        if (cartQuantity >= availableQuantity) {
+            return alert("Out of stock");
+        }
+
+        const success = await addToCart(product);
+        if (success) {
+            alert("Product added to cart");
+        } else {
+            alert("Failed to add product to cart. Please try again. out of stock!");
+        }
+    } catch (error) {
+        const errorMessage = error.response?.data?.message || "Failed to add product to cart. Please try again.";
+        alert(errorMessage);
+        console.error("Error adding to cart", error);
+    }
+};
+
+
+//   const handleAddToCart = async (productId, product) => {
+//     const token = localStorage.getItem('jwt');
+//     if (!token) return alert("User not logged in");
+
+//     try {
+//         // Check available quantities
+//         const productResponse = await axios.get(`http://localhost:8080/users/quantity/${productId}/cart`);
+//         const availableQuantity = productResponse.data;
+
+//         const userCartResponse = await axios.get(`http://localhost:8080/users/currentquantity/${userId}/${productId}/cart`, {
+//             headers: { Authorization: `Bearer ${token}` }
+//         });
+//         const cartQuantity = userCartResponse.data;
+
+//         if (cartQuantity >= availableQuantity) {
+//             return alert("Out of stock");
+//         } else {
+//             // Proceed to add to cart only if the check passes
+//             const success = await addToCart(product);
+//             if (success) {
+//                 alert("Product added to cart");
+//             } else {
+//                 alert("Failed to add product to cart. Please try again.");
+//             }
+//         }
+//     } catch (error) {
+//         console.error("Error adding to cart", error);
+//         alert("Failed to add product to cart. Please try again.");
+//     }
+// };
+
+
+  
 
   if (!product) {
     return <h2 className="text-center" style={{ padding: "10rem" }}>Loading...</h2>;
@@ -84,22 +144,23 @@ const Product = () => {
           <div className="product-price">
             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>${product.price}</span>
             <button
-              className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-              onClick={handleAddToCart}
-              disabled={!product.productAvailable}
-              style={{
-                padding: "1rem 2rem",
-                fontSize: "1rem",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                marginBottom: "1rem",
-              }}
-              >
-              {product.productAvailable ? "Add to cart" : "Out of Stock"}
-            </button>
+  className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
+  onClick={() => handleAddToCart(product.id, product)}  // Wrap it in an arrow function
+  disabled={!product.productAvailable}
+  style={{
+    padding: "1rem 2rem",
+    fontSize: "1rem",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    marginBottom: "1rem",
+  }}
+>
+  {product.productAvailable ? "Add to cart" : "Out of Stock"}
+</button>
+
             <h6 style={{ marginBottom: "1rem" }}>
               Stock Available: <i style={{ color: "green", fontWeight: "bold" }}>{product.stockQuantity}</i>
             </h6>
@@ -107,8 +168,8 @@ const Product = () => {
 
           {/* Conditionally render Edit and Delete buttons */}
               {/* console.log("Pro: "+product.userId) */}
-              {console.log("product id"+product.userId)}
-              {console.log("user id"+curid)}
+              {/* {console.log("product id"+product.userId)}
+              {console.log("user id"+curid)} */}
           {product.userId ==  curid&& ( 
             <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
               <button

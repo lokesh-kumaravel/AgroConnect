@@ -28,7 +28,6 @@ public class ProductController {
     
      @GetMapping("/user/{userId}")
     public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable String userId) {
-        System.out.println("Hello!!!s");
         List<Product> products = service.getProductsByUserId(userId);
         if (products == null || products.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.OK); // Return 404 if no products found
@@ -45,7 +44,6 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(@PathVariable String id){
 
         Product product = service.getProductById(id);
-
         if(product != null)
             return new ResponseEntity<>(product, HttpStatus.OK);
         else
@@ -56,8 +54,6 @@ public class ProductController {
     public ResponseEntity<?> addProduct(@RequestPart Product product,
                                         @RequestPart MultipartFile imageFile,String userid){
         try {
-            System.out.println(product);
-            System.out.println("This is the user id from the frontend: "+userid);
             Product product1 = service.addProduct(product, imageFile, userid);
             return new ResponseEntity<>(product1, HttpStatus.CREATED);
         }
@@ -83,8 +79,6 @@ public class ProductController {
                                                 @RequestPart MultipartFile imageFile , String currentuserid){
         if(currentuserid.equals(product.getUserId()))
         {
-            System.out.println("&&& &&&&: "+product.getUserId());
-            System.out.println("&&&&: "+currentuserid);
             Product product1 = null;
             try {
                 product1 = service.updateProduct(id, product, imageFile);
@@ -98,8 +92,6 @@ public class ProductController {
         }
         else
         {
-            System.out.println("&&& &&&&: "+product.getUserId());
-            System.out.println("&&&&: "+currentuserid);
             return new ResponseEntity<>("You cannot have access update", HttpStatus.BAD_REQUEST);
         }
     }
@@ -120,7 +112,7 @@ public class ProductController {
     @GetMapping("/products/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword){
         List<Product> products = service.searchProducts(keyword);
-        System.out.println("searching with " + keyword);
+        // System.out.println("searching with " + keyword);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 

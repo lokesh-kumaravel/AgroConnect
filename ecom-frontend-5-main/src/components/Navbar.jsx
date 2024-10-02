@@ -81,6 +81,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("currentuser");
     setToken(null); // Update state to re-render the navbar
   };
 

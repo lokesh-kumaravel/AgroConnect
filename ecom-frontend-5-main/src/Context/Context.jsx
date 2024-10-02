@@ -31,25 +31,35 @@ export const AppProvider = ({ children }) => {
   const addToCart = async (product) => {
     if (!userId) {
         console.error("User ID is null, cannot add to cart.");
-        return; // Early return if userId is null
+        return false; // Indicate failure due to missing user ID
     }
 
-    console.log(product)
     const cartItem = { productId: product.id, quantity: 1 };
 
     try {
-      const token = localStorage.getItem('jwt');
-      console.log(userId)
-        const response = await axios.put(`http://localhost:8080/users/${userId}/cart`, cartItem, {
-          // method:'PUT',
-            headers: { Authorization: "Bearer "+token }
-        });
-        setCart(response.data.cart); // Update the frontend cart
+        const token = localStorage.getItem('jwt');
+        if (token) {
+            const response = await axios.put(`http://localhost:8080/users/${userId}/cart`, cartItem, {
+                headers: { Authorization: "Bearer " + token }
+            });
+
+            // Check if the response status is in the success range
+            if (response.status >= 200 && response.status < 300) {
+                setCart(response.data.cart); // Update the frontend cart
+                return true; // Indicate success
+            } else {
+                console.error("Unexpected response:", response);
+                return false; // Indicate failure
+            }
+        }
     } catch (error) {
         console.error("Error adding to cart", error.response ? error.response.data : error);
+        return false; // Indicate failure
     }
-    console.log("Here")
 };
+
+
+
 
 
   const removeFromCart = async (productId) => {
@@ -90,7 +100,9 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (userId) {
+    const token = localStorage.getItem('jwt');
+      // console.log(token)
+    if (userId&&token) {
       const fetchCart = async (userId) => {
         try {
             const token = localStorage.getItem("jwt"); // Assuming token is stored in local storage
