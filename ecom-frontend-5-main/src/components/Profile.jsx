@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import AppContext from "../Context/Context";
 import './Profile.css';
 import { Link, useNavigate } from 'react-router-dom'; 
 const Profile = () => {
+
   const [userData, setUserData] = useState(null);
   const [products, setProducts] = useState([]);
   const [file, setFile] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const count = products.length;
   const navigate = useNavigate();
+
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
@@ -51,6 +54,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error uploading photo:', error);
     }
+    window.location.reload()  
   };
   useEffect(() => {
     const fetchProfile = async () => {
@@ -94,7 +98,11 @@ useEffect(() => {
     <div className="profile-card">
     <div>
       {profilePhoto ? (
+        <>
         <img src={profilePhoto} alt="Profile" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+        <br></br><input type="file" onChange={handleFileChange} placeholder='edit profile'/>
+        <br></br><button onClick={handleUpload}>Edit</button>
+        </>
       ) : (
         // <p>No profile photo available</p>
         <div>
@@ -199,7 +207,10 @@ useEffect(() => {
                         {price}
                       </h5>
                     </div>
-                    <button
+                    <p>
+                      Views : 0
+                    </p>
+                    {/* <button
                       className="btn-hover color-9"
                       style={{margin:'10px 25px 0px '  }}
                       onClick={(e) => {
@@ -210,7 +221,7 @@ useEffect(() => {
                       disabled={!productAvailable}
                     >
                       {productAvailable ? "Add to Cart" : "Out of Stock"}
-                    </button> 
+                    </button>  */}
                   </div>
                 </Link>
               </div>

@@ -119,11 +119,11 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                   Home
                 </a>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <a className="nav-link" href="/add_product">
                   Add Product
                 </a>
-              </li>
+              </li> */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -164,14 +164,19 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                 </>
               ) : (
                 <>
-                  <li className="nav-item">
-                    <a className="nav-link" onClick={handleLogout} href="/">
-                      Logout
-                    </a>
-                  </li>
+                <li className="nav-item">
+                <a className="nav-link" href="/add_product">
+                  Add Product
+                </a>
+              </li>
                   <li className="nav-item">
                     <a className="nav-link" href="/profile">
                       Profile
+                    </a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" onClick={handleLogout} href="/">
+                      Logout
                     </a>
                   </li>
                 </>

@@ -1,6 +1,7 @@
 package com.lokesh.ecom_proj.repo;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import com.lokesh.ecom_proj.model.User;
