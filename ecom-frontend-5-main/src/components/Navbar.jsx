@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const Navbar = ({ onSelectCategory, onSearch }) => {
   const getInitialTheme = () => {
     const storedTheme = localStorage.getItem("theme");
     return storedTheme ? storedTheme : "light-theme";
   };
 
+  const navigate = useNavigate(); 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [theme, setTheme] = useState(getInitialTheme());
   const [input, setInput] = useState("");
@@ -65,6 +66,8 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   };
 
   const handleCategorySelect = (category) => {
+    console.log(category)
+    navigate('/')
     setSelectedCategory(category);
     onSelectCategory(category);
   };
@@ -89,7 +92,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     "Seed",
     "Equipment",
     "Tools",
-    "Machinery",
+    "Machinary",
     "Herbicide",
     "Pesticides",
   ];

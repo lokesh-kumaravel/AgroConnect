@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lokesh.ecom_proj.model.User;
@@ -50,6 +51,26 @@ public ResponseEntity<AuthResponse> login(@RequestBody User user) {
         System.out.println("HHHHHHHHHHHH"+authResponse.getUserId());
         return ResponseEntity.ok(authResponse);
 
+}
+@Autowired
+private UserRepo userrepo;
+
+@GetMapping("/getusername/{userId}")
+public String getUsername(@PathVariable String userId) {  // Use @PathVariable instead of @RequestParam
+    System.out.println("User ID: " + userId);
+
+    // Fetch user by ID
+    User user = userrepo.getUserById(userId);
+
+    // Log and handle potential null user
+    if (user != null) {
+        String name = user.getUsername();
+        System.out.println("Username: " + name);
+        return name != null ? name : "Username not found";
+    } else {
+        System.out.println("User not found for ID: " + userId);
+        return "User not found";
+    }
 }
 
     // @PostMapping("/login")

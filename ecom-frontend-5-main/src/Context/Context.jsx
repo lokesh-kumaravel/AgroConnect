@@ -1,7 +1,10 @@
 import axios from "../axios";
 import { useState, useEffect, createContext } from "react"; 
+// import { useNavigate } from 'react-router-dom'; 
 
 const AppContext = createContext({
+  // username: "",
+  // setUsername: (name) => {},
   data: [],
   isError: "",
   cart: [],
@@ -15,6 +18,8 @@ const AppContext = createContext({
 });
 
 export const AppProvider = ({ children }) => {
+  // const navigate = useNavigate(); // Ensure this is inside AppProvider
+  const [username, setUsername] = useState(null);
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState("");
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
@@ -24,53 +29,85 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     const storedUserId = localStorage.getItem('currentuser');
     if (storedUserId) {
-      setUserId(storedUserId); // Set the userId from localStorage if it exists
+      setUserId(storedUserId);
+      // fetchUsername(storedUserId);
     }
   }, []);
 
+  // const fetchUsername = async () => {
+  //  var  Id = localStorage.getItem("currentuser")
+  //   const token = localStorage.getItem('jwt'); // Assuming token is stored in localStorage
+  //   try {
+  //     const response = await fetch(`http://localhost:8080/getusername/${Id}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`, // Include the token if needed
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  
+  //     if (response.ok) {
+  //       const data = await response.text();
+  //       console.log(data);
+  //     } else {
+  //       console.error('Error fetching username:', response.status);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching username:', error);
+  //   }
+  // };
+  
+  // const fetchUsername = async (userId) => {
+  //   try {
+  //     const token = localStorage.getItem('jwt');
+  //     if (!token) {
+  //       // navigate('/login');
+  //       return;
+  //     }
+  //     const response = await axios.get(`http://localhost:8080/getusername/${userId}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     setUsername(response.data.username);
+  //   } catch (error) {
+  //     console.error("Error fetching username", error);
+  //   }
+  // };
+
   const addToCart = async (product) => {
     if (!userId) {
-        console.error("User ID is null, cannot add to cart.");
-        return false; // Indicate failure due to missing user ID
+      console.error("User ID is null, cannot add to cart.");
+      return false;
     }
-
     const cartItem = { productId: product.id, quantity: 1 };
 
     try {
-        const token = localStorage.getItem('jwt');
-        if (token) {
-            const response = await axios.put(`http://localhost:8080/users/${userId}/cart`, cartItem, {
-                headers: { Authorization: "Bearer " + token }
-            });
-
-            // Check if the response status is in the success range
-            if (response.status >= 200 && response.status < 300) {
-                setCart(response.data.cart); // Update the frontend cart
-                return true; // Indicate success
-            } else {
-                console.error("Unexpected response:", response);
-                return false; // Indicate failure
-            }
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        const response = await axios.put(`http://localhost:8080/users/${userId}/cart`, cartItem, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.status >= 200 && response.status < 300) {
+          setCart(response.data.cart);
+          return true;
+        } else {
+          console.error("Unexpected response:", response);
+          return false;
         }
+      }
     } catch (error) {
-        console.error("Error adding to cart", error.response ? error.response.data : error);
-        return false; // Indicate failure
+      console.error("Error adding to cart", error);
+      return false;
     }
-};
-
-
-
-
+  };
 
   const removeFromCart = async (productId) => {
     if (!userId) {
       console.error("User ID is null, cannot remove from cart.");
-      return; // Early return if userId is null
+      return;
     }
-
     try {
       const response = await axios.delete(`/users/${userId}/cart/${productId}`);
-      setCart(response.data.cart); // Update the frontend cart
+      setCart(response.data.cart);
     } catch (error) {
       console.error("Error removing from cart", error);
     }
@@ -80,6 +117,7 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await axios.get("/products");
       setData(response.data);
+      setUsername(response.data);
     } catch (error) {
       setIsError(error.message);
     }
@@ -92,7 +130,7 @@ export const AppProvider = ({ children }) => {
   const logout = () => {
     setUserId(null);
     localStorage.removeItem('jwt');
-    localStorage.removeItem('currentuser'); // Clear userId on logout
+    localStorage.removeItem('currentuser');
   };
 
   useEffect(() => {
@@ -101,30 +139,23 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
-      // console.log(token)
-    if (userId&&token) {
+    if (userId && token) {
       const fetchCart = async (userId) => {
         try {
-            const token = localStorage.getItem("jwt"); // Assuming token is stored in local storage
-            console.log(token+" "+userId)
-            const response = await axios.get(`http://localhost:8080/users/${userId}/cart`, {
-                headers: {
-                    Authorization: "Bearer "+token // Include JWT token in Authorization header
-                }
-            });
-            // Handle response
+          const response = await axios.get(`http://localhost:8080/users/${userId}/cart`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setCart(response.data.cart);
         } catch (error) {
-            console.error("Error fetching cart", error);
+          console.error("Error fetching cart", error);
         }
-    };
-    
-      var id = localStorage.getItem("currentuser")
-      fetchCart(id);
+      };
+      fetchCart(userId);
     }
   }, [userId]);
 
   return (
-    <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, userId, setUserId, logout }}>
+    <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, userId, setUserId, logout, username, setUsername }}>
       {children}
     </AppContext.Provider>
   );
@@ -132,11 +163,13 @@ export const AppProvider = ({ children }) => {
 
 export default AppContext;
 
-// import axios from "../axios";
-// import { useState, useEffect, createContext } from "react";
-// import { useNavigate } from 'react-router-dom'; 
 
+// import axios from "../axios";
+// import { useState, useEffect, createContext } from "react"; 
+// import { useNavigate } from 'react-router-dom'; 
 // const AppContext = createContext({
+//   username: null,
+//   setUsername: (name) => {},
 //   data: [],
 //   isError: "",
 //   cart: [],
@@ -150,31 +183,88 @@ export default AppContext;
 // });
 
 // export const AppProvider = ({ children }) => {
+
+//   const navigate = useNavigate();
+//   const [username, setUsername] = useState(null);
 //   const [data, setData] = useState([]);
 //   const [isError, setIsError] = useState("");
 //   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
 //   const [userId, setUserId] = useState(null);
 
-//   const addToCart = (product) => {
-//     const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-//     if (existingProductIndex !== -1) {
-//       const updatedCart = cart.map((item, index) =>
-//         index === existingProductIndex
-//           ? { ...item, quantity: item.quantity + 1 }
-//           : item
-//       );
-//       setCart(updatedCart);
-//     } else {
-//       const updatedCart = [...cart, { ...product, quantity: 1 }];
-//       setCart(updatedCart);
+//   // Set userId from localStorage on initial render
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem('currentuser');
+//     if (storedUserId) {
+//       setUserId(storedUserId); // Set the userId from localStorage if it exists
+//       fetchUsername(storedUserId);
 //     }
-//     localStorage.setItem('cart', JSON.stringify(cart));
-//   };
+//   }, []);
 
-//   const removeFromCart = (productId) => {
-//     const updatedCart = cart.filter((item) => item.id !== productId);
-//     setCart(updatedCart);
-//     localStorage.setItem('cart', JSON.stringify(updatedCart));
+//   const fetchUsername = async (userId) => {
+//     try {
+//       const token = localStorage.getItem('jwt');
+//       console.log(token)
+//       if(!token)
+//       {
+//         navigate('/login');
+//         return;
+//       }
+//       const response = await axios.get(`http://localhost:8080/getusername/${userId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+//       setUsername(response.data.username); // Adjust based on your API response
+//     } catch (error) {
+//       console.error("Error fetching username", error);
+//     }
+//   };
+//   const addToCart = async (product) => {
+//     if (!userId) {
+//         console.error("User ID is null, cannot add to cart.");
+//         return false; // Indicate failure due to missing user ID
+//     }
+
+//     const cartItem = { productId: product.id, quantity: 1 };
+
+//     try {
+//         const token = localStorage.getItem('jwt');
+//         if (token) {
+//             const response = await axios.put(`http://localhost:8080/users/${userId}/cart`, cartItem, {
+//                 headers: { Authorization: "Bearer " + token }
+//             });
+
+//             // Check if the response status is in the success range
+//             if (response.status >= 200 && response.status < 300) {
+//                 setCart(response.data.cart); // Update the frontend cart
+//                 return true; // Indicate success
+//             } else {
+//                 console.error("Unexpected response:", response);
+//                 return false; // Indicate failure
+//             }
+//         }
+//     } catch (error) {
+//         console.error("Error adding to cart", error.response ? error.response.data : error);
+//         return false; // Indicate failure
+//     }
+// };
+
+
+
+
+
+//   const removeFromCart = async (productId) => {
+//     if (!userId) {
+//       console.error("User ID is null, cannot remove from cart.");
+//       return; // Early return if userId is null
+//     }
+
+//     try {
+//       const response = await axios.delete(`/users/${userId}/cart/${productId}`);
+//       setCart(response.data.cart); // Update the frontend cart
+//     } catch (error) {
+//       console.error("Error removing from cart", error);
+//     }
 //   };
 
 //   const refreshData = async () => {
@@ -193,6 +283,7 @@ export default AppContext;
 //   const logout = () => {
 //     setUserId(null);
 //     localStorage.removeItem('jwt');
+//     localStorage.removeItem('currentuser'); // Clear userId on logout
 //   };
 
 //   useEffect(() => {
@@ -200,104 +291,31 @@ export default AppContext;
 //   }, []);
 
 //   useEffect(() => {
-//     localStorage.setItem('cart', JSON.stringify(cart));
-//   }, [cart]);
-
-//   return (
-//     <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, userId, setUserId, logout }}>
-//       {children}
-//     </AppContext.Provider>
-//   );
-// };
-
-// export default AppContext;
-
-// import axios from "../axios";
-// import { useState, useEffect, createContext } from "react";
-// import { useNavigate } from 'react-router-dom'; 
-
-// const AppContext = createContext({
-//   data: [],
-//   isError: "",
-//   cart: [],
-//   addToCart: (product) => {},
-//   removeFromCart: (productId) => {},
-//   refreshData:() =>{},
-//   updateStockQuantity: (productId, newQuantity) =>{}
-  
-// });
-// // const Logout = () => {
-// //     const navigate = useNavigate();
-// //     useEffect(() => {
-//   //         localStorage.removeItem('jwt');
-//   //         navigate("/login");
-//   //     }, [navigate]); 
-  
-//   //     return null; 
-//   // }
-  
-//   // export default Logout;
-  
-//   export const AppProvider = ({ children }) => {
-//     const [data, setData] = useState([]);
-//     const [isError, setIsError] = useState("");
-//     const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
-//     const [userId, setUserId] = useState(null); 
-//   // const navigate = useNavigate();
-//   // useEffect(() => {
-//   //           var token  localStorage.getItem('jwt');
-//   //           navigate("/login");
-//   //       }, [navigate]); 
+//     const token = localStorage.getItem('jwt');
+//       // console.log(token)
+//     if (userId&&token) {
+//       const fetchCart = async (userId) => {
+//         try {
+//             const token = localStorage.getItem("jwt"); // Assuming token is stored in local storage
+//             console.log(token+" "+userId)
+//             const response = await axios.get(`http://localhost:8080/users/${userId}/cart`, {
+//                 headers: {
+//                     Authorization: "Bearer "+token // Include JWT token in Authorization header
+//                 }
+//             });
+//             // Handle response
+//         } catch (error) {
+//             console.error("Error fetching cart", error);
+//         }
+//     };
     
-
-//   const addToCart = (product) => {
-//     const existingProductIndex = cart.findIndex((item) => item.id === product.id);
-//     if (existingProductIndex !== -1) {
-//       const updatedCart = cart.map((item, index) =>
-//         index === existingProductIndex
-//           ? { ...item, quantity: item.quantity + 1 }
-//           : item
-//       );
-//       setCart(updatedCart);
-//       localStorage.setItem('cart', JSON.stringify(updatedCart));
-//     } else {
-//       const updatedCart = [...cart, { ...product, quantity: 1 }];
-//       setCart(updatedCart);
-//       localStorage.setItem('cart', JSON.stringify(updatedCart));
+//       var id = localStorage.getItem("currentuser")
+//       fetchCart(id);
 //     }
-//   };
+//   }, [userId]);
 
-//   const removeFromCart = (productId) => {
-//     console.log("productID",productId)
-//     const updatedCart = cart.filter((item) => item.id !== productId);
-//     setCart(updatedCart);
-//     localStorage.setItem('cart', JSON.stringify(updatedCart));
-//     console.log("CART",cart)
-//   };
-
-//   const refreshData = async () => {
-//     try {
-//       const response = await axios.get("/products");
-//       setData(response.data);
-//     } catch (error) {
-//       setIsError(error.message);
-//     }
-//   };
-
-//   const clearCart =() =>{
-//     setCart([]);
-//   }
-  
-//   useEffect(() => {
-//     refreshData();
-//   }, []);
-
-//   useEffect(() => {
-//     localStorage.setItem('cart', JSON.stringify(cart));
-//   }, [cart]);
-  
 //   return (
-//     <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart,refreshData, clearCart, userId, setUserId  }}>
+//     <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, userId, setUserId, logout, username, setUsername, }}>
 //       {children}
 //     </AppContext.Provider>
 //   );

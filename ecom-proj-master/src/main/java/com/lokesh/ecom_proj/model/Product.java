@@ -34,6 +34,8 @@ public class Product {
     private String imageName;
     private String imageType;
     private byte[] imageDate;
+
+    // pri
 }
 
 // package com.lokesh.ecom_proj.model;
