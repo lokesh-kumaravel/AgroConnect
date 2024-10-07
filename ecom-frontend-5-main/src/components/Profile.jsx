@@ -165,7 +165,7 @@ const Profile = () => {
         }}
       >
           {products.map((product) => {
-            const { id, brand, name, price, productAvailable } =
+            const { id, brand, name, price, productAvailable, viewCount } =
               product;
             const cardStyle = {
               width: "18rem",
@@ -241,7 +241,8 @@ const Profile = () => {
                       </h5>
                     </div>
                     <p>
-                      Views : 0
+                      Views : {product.viewCount} 
+                      {/* Views : 0 */}
                     </p>
                     {/* <button
                       className="btn-hover color-9"

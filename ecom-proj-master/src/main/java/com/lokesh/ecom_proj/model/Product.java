@@ -34,8 +34,8 @@ public class Product {
     private String imageName;
     private String imageType;
     private byte[] imageDate;
-
-    // pri
+    private int viewCount;
+    private String upiId = "lokeshkumaravel29@okaxis";
 }
 
 // package com.lokesh.ecom_proj.model;

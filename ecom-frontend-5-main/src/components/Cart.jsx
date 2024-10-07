@@ -12,6 +12,8 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedItems, setSelectedItems] = useState(new Set()); // Track selected items
+
   useEffect(() => {
     const fetchCartItems = async () => {
       const token = localStorage.getItem('jwt');
@@ -32,7 +34,8 @@ const Cart = () => {
           return {
             ...cartItem.product,
             quantity: cartItem.quantity,
-            price
+            price,
+            imageUrl: cartItem.product.imageDate
           };
         });
   
@@ -47,7 +50,6 @@ const Cart = () => {
   
     fetchCartItems();
   }, [navigate]);
-  
 
   // Calculate total price whenever cartItems are updated
   useEffect(() => {
@@ -58,19 +60,24 @@ const Cart = () => {
     }, 0);
     setTotalPrice(total);
   }, [cartItems]);
+
+  const calculateSelectedTotalPrice = () => {
+    return cartItems
+      .filter(item => selectedItems.has(item.id))
+      .reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  };
+
   const handleIncreaseQuantity = async (itemId) => {
     setLoading(true); 
     const userId = localStorage.getItem("currentuser");
-  
-    // Fetch the current product data to check its quantity
+
     try {
       const productResponse = await axios.get(`http://localhost:8080/api/product/${itemId}`);
-      const currentProductQuantity = productResponse.data.stockQuantity; // Adjust based on your API response structure
+      const currentProductQuantity = productResponse.data.stockQuantity;
       console.log(currentProductQuantity)
       setCartItems((prevItems) => {
-        // Find the cart item being updated
         const itemToUpdate = prevItems.find(item => item.id === itemId);
-  
+
         if (itemToUpdate) {
           if (itemToUpdate.quantity < currentProductQuantity) {
             const updatedItems = prevItems.map((item) =>
@@ -78,16 +85,15 @@ const Cart = () => {
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             );
-  
-            // Call the update function with the new quantity
+
             updateCartItem(userId, itemId, itemToUpdate.quantity + 1);
-            return updatedItems; // Return the updated items
+            return updatedItems;
           } else {
-            alert("Out of Stock!"); // Notify user of stock issues
-            return prevItems; // No changes to the cart
+            alert("Out of Stock!");
+            return prevItems;
           }
         }
-        return prevItems; // If item doesn't exist, return unchanged
+        return prevItems;
       });
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -95,65 +101,26 @@ const Cart = () => {
     }
     setLoading(false);
   };
-  
-  
-  // const handleIncreaseQuantity = async (itemId) => {
-  //   const userId = localStorage.getItem("currentuser");
-  
-  //   // Fetch the current product data to check its quantity
-  //   try {
-  //     const productResponse = await axios.get(`http://localhost:8080/api/product/${itemId}`);
-  //     const currentProductQuantity = productResponse.data.quantity; // Adjust based on your API response structure
-  
-  //     setCartItems((prevItems) => {
-  //       // Find the cart item being updated
-  //       const itemToUpdate = prevItems.find(item => item.id === itemId);
-  
-  //       // If the current cart item exists and there's stock available
-  //       if (itemToUpdate && itemToUpdate.quantity <= currentProductQuantity) {
-  //         const updatedItems = prevItems.map((item) =>
-  //           item.id === itemId
-  //             ? { ...item, quantity: item.quantity + 1 }
-  //             : item
-  //         );
-  
-  //         // Call the update function with the new quantity
-  //         updateCartItem(userId, itemId, itemToUpdate.quantity + 1); // Update the quantity to +1
-  //         return updatedItems; // Return the updated items
-  //       } else {
-  //         // Optionally handle the case where there's not enough stock
-  //         console.warn("Not enough stock available for this product.");
-  //         alert("Out of Stock!")
-  //         return prevItems; // No changes to the cart
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching product data:", error);
-  //   }
-  // };
-  
-  
+
   const handleDecreaseQuantity = (itemId) => {
     setLoading(true); 
     setCartItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
         if (item.id === itemId) {
-          const newQuantity = Math.max(item.quantity - 1, 0); // Ensure quantity doesn't go below 0
+          const newQuantity = Math.max(item.quantity - 1, 0);
           return { ...item, quantity: newQuantity };
         }
         return item;
       });
-  
+
       const itemToRemove = updatedItems.find(item => item.id === itemId && item.quantity === 0);
       if (itemToRemove) {
-        handleRemoveFromCart(itemId); // Remove the item if quantity is 0
+        handleRemoveFromCart(itemId);
       }
-  
-      // Find the updated item to call the update function
+
       const updatedItem = updatedItems.find(item => item.id === itemId);
       const userId = localStorage.getItem("currentuser");
       
-      // Call the update function with the new quantity
       if (updatedItem) {
         updateCartItem(userId, itemId, updatedItem.quantity); 
       }
@@ -162,30 +129,25 @@ const Cart = () => {
     });
     setLoading(false);
   };
-  
-  
+
   const updateCartItem = async (userId, itemId, newQuantity) => {
     try {
-        const token = localStorage.getItem('jwt');
-        const response = await axios.put(
-            `http://localhost:8080/users/${userId}/cart/${itemId}`,
-            { quantity: newQuantity }, // Wrap the quantity in an object
-            {
-                headers: { 
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json' // Set content type to JSON
-                }
-            }
-        );
-        console.log("Cart updated successfully:", response.data);
+      const token = localStorage.getItem('jwt');
+      const response = await axios.put(
+        `http://localhost:8080/users/${userId}/cart/${itemId}`,
+        { quantity: newQuantity },
+        {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      console.log("Cart updated successfully:", response.data);
     } catch (error) {
-        console.error("Error updating cart item:", error);
+      console.error("Error updating cart item:", error);
     }
-};
-
-
-  
-// Usage: Call this function when you want to update the quantity
+  };
 
   const handleRemoveFromCart = async (itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
@@ -200,18 +162,32 @@ const Cart = () => {
     }
   };
   
-  const handleshowdescription = (itemId) =>{
-    console.log(itemId)
+  const handleshowdescription = (itemId) => {
     navigate(`/product/${itemId}`);
-  }
+  };
+
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems(prevSelectedItems => {
+      const updatedSelectedItems = new Set(prevSelectedItems);
+      if (updatedSelectedItems.has(itemId)) {
+        updatedSelectedItems.delete(itemId); // Deselect item
+      } else {
+        updatedSelectedItems.add(itemId); // Select item
+      }
+      return updatedSelectedItems;
+    });
+  };
+
   const handleCheckout = async () => {
-    try {
-      await clearCart();
-      setCartItems([]);
-      setShowModal(false);
-    } catch (error) {
-      console.error("Error during checkout:", error);
+    const selectedProducts = cartItems.filter(item => selectedItems.has(item.id));
+    if (selectedProducts.length === 0) {
+      alert("Please select at least one item to proceed to checkout.");
+      return;
     }
+
+    const selectedTotalPrice = calculateSelectedTotalPrice();
+    console.log("Selected Total Price:", selectedTotalPrice);
+    // Further checkout logic here (e.g., API call)
   };
 
   return (
@@ -224,49 +200,58 @@ const Cart = () => {
           </div>
         ) : (
           <>
-          {cartItems.map((item) => (
-  <li key={item.id} className="cart-item">
-    <div className="item" style={{ display: "flex", alignItems: "center" }}>
-      <div>
-        <img
-        onClick={() => handleshowdescription(item.id)}
-        style={{cursor:"pointer"}}
-          src={
-            item.imageDate
-              ? `data:image/png;base64,${item.imageDate.replace(/^Binary\.createFromBase64\('(.+)'\, \d+\)$/, '$1')}`
-              : (item.imageData ? `data:image/png;base64,${item.imageData}` : "placeholder-image-url")
-          }
-          alt={item.name}
-          className="cart-item-image"
-          onError={(e) => {
-            e.target.src = "placeholder-image-url"; // Fallback to placeholder on error
-          }}
-        />
-      </div>
-      <div className="description">
-        <span>{item.brand}</span>
-        <span>{item.name}</span>
-      </div>
-      <div className="quantity">
-        <button className="plus-btn" type="button" onClick={() => handleIncreaseQuantity(item.id)}disabled={loading}>
-          <i className="bi bi-plus-square-fill"></i>
-        </button>
-        <input type="text" value={item.quantity} readOnly />
-        <button className="minus-btn" type="button" onClick={() => handleDecreaseQuantity(item.id)}disabled={loading}>
-          <i className="bi bi-dash-square-fill"></i>
-        </button>
-      </div>
-      <div className="total-price" style={{ textAlign: "center" }}>
-        ${(item.price * item.quantity).toFixed(2)}
-      </div>
-      <button className="remove-btn" onClick={() => handleRemoveFromCart(item.id)}>
-        <i className="bi bi-trash3-fill"></i>
-      </button>
-    </div>
-  </li>
-))}
-
-
+            {cartItems.map((item) => (
+              <li key={item.id} className="cart-item">
+                <div className="item" style={{ display: "flex", alignItems: "center" }}>
+                  <div>
+                    <input
+                    style={{
+                      marginRight: "10px",
+                      transform: "scale(1.5)", // Adjust the scale factor as needed
+                      cursor: "pointer"
+                    }}
+                      type="checkbox"
+                      checked={selectedItems.has(item.id)}
+                      onChange={() => handleCheckboxChange(item.id)}
+                      // style={{ marginRight: "10px" }}
+                    />
+                    <img
+                      onClick={() => handleshowdescription(item.id)}
+                      style={{ cursor: "pointer" }}
+                      src={
+                        item.imageDate
+                          ? `data:image/png;base64,${item.imageDate.replace(/^Binary\.createFromBase64\('(.+)'\, \d+\)$/, '$1')}`
+                          : (item.imageData ? `data:image/png;base64,${item.imageData}` : "placeholder-image-url")
+                      }
+                      alt={item.name}
+                      className="cart-item-image"
+                      onError={(e) => {
+                        e.target.src = "placeholder-image-url";
+                      }}
+                    />
+                  </div>
+                  <div className="description">
+                    <span>{item.brand}</span>
+                    <span>{item.name}</span>
+                  </div>
+                  <div className="quantity">
+                    <button className="plus-btn" type="button" onClick={() => handleIncreaseQuantity(item.id)} disabled={loading}>
+                      <i className="bi bi-plus-square-fill"></i>
+                    </button>
+                    <input type="text" value={item.quantity} readOnly />
+                    <button className="minus-btn" type="button" onClick={() => handleDecreaseQuantity(item.id)} disabled={loading}>
+                      <i className="bi bi-dash-square-fill"></i>
+                    </button>
+                  </div>
+                  <div className="total-price" style={{ textAlign: "center" }}>
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </div>
+                  <button className="remove-btn" onClick={() => handleRemoveFromCart(item.id)}>
+                    <i className="bi bi-trash3-fill"></i>
+                  </button>
+                </div>
+              </li>
+            ))}
             <div className="total">Total: ${totalPrice.toFixed(2)}</div>
             <Button className="btn btn-primary" style={{ width: "100%" }} onClick={() => setShowModal(true)}>
               Checkout
@@ -277,8 +262,9 @@ const Cart = () => {
       <CheckoutPopup
         show={showModal}
         handleClose={() => setShowModal(false)}
+        selectedItems={selectedItems} 
         cartItems={cartItems}
-        totalPrice={totalPrice}
+        totalPrice={calculateSelectedTotalPrice()} // Total price of selected items
         handleCheckout={handleCheckout}
       />
     </div>
@@ -286,6 +272,7 @@ const Cart = () => {
 };
 
 export default Cart;
+
 
 // import React, { useContext, useState, useEffect } from "react";
 // import AppContext from "../Context/Context";

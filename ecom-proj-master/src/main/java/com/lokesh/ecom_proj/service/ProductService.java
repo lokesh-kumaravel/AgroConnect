@@ -1,5 +1,6 @@
 package com.lokesh.ecom_proj.service;
 
+import com.lokesh.ecom_proj.exception.ResourceNotFoundException;
 import com.lokesh.ecom_proj.model.Product;
 import com.lokesh.ecom_proj.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,12 @@ public class ProductService {
             // System.out.println("No products found for userId: " + userId);
         } 
         return result;
+    }
+    public Product incrementViewCount(String productId) {
+        Product product = repo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        product.setViewCount(product.getViewCount() + 1);
+        System.out.println("This is the view count : "+product.getViewCount());
+        return repo.save(product);
     }
     
 }

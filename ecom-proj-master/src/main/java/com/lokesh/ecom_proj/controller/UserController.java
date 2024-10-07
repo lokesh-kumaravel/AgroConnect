@@ -50,7 +50,6 @@ public ResponseEntity<AuthResponse> login(@RequestBody User user) {
         AuthResponse authResponse = authService.verify(user);
         System.out.println("HHHHHHHHHHHH"+authResponse.getUserId());
         return ResponseEntity.ok(authResponse);
-
 }
 @Autowired
 private UserRepo userrepo;

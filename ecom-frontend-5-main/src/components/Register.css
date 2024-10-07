@@ -1,0 +1,16 @@
+
+:root {
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --input-border-color: #ccc;
+    --button-bg-color: #4285F4;
+    --button-text-color: white;
+}
+
+.dark-theme {
+    --background-color: #333;
+    --text-color: #ffffff;
+    --input-border-color: #666;
+    --button-bg-color: #555;
+    --button-text-color: #fff;
+}

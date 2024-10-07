@@ -115,7 +115,12 @@ public class ProductController {
         // System.out.println("searching with " + keyword);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
+    @PostMapping("products/{id}/view")
+    public ResponseEntity<Product> viewProduct(@PathVariable String id) {
+        System.out.println("This is the id"+id);
+        Product updatedProduct = service.incrementViewCount(id);
+        return ResponseEntity.ok(updatedProduct);
+    }
 
 }
 // package com.lokesh.ecom_proj.controller;
