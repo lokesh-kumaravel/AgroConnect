@@ -224,7 +224,7 @@ const Product = () => {
                     transactionInfo: {
                       totalPriceStatus: 'FINAL',
                       totalPriceLabel: 'Total',
-                      totalPrice: '0',
+                      totalPrice: '100',
                       currencyCode: 'USD',
                       countryCode: 'US',
                     },

@@ -37,7 +37,7 @@ const Register = () => {
 
     return (
         <div style={{ textAlign: 'center', marginTop: '50px', padding: '40px' }}>
-            <div style={{padding:'6%'}}></div>
+            <div style={{padding:'3%'}}></div>
             <h1 style={{ fontFamily: 'Arial, sans-serif', color: 'green' }}>Register</h1>
             <form onSubmit={handleRegister}>
                 <div style={{ margin: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
