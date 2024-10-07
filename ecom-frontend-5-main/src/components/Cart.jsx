@@ -24,7 +24,7 @@ const Cart = () => {
   
       try {
         const userId = localStorage.getItem("currentuser");
-        const response = await axios.get(`http://localhost:8080/users/${userId}/cart`, {
+        const response = await axios.get(`http://192.168.77.227:8080/users/${userId}/cart`, {
           headers: { Authorization: `Bearer ${token}` },
         });
   
@@ -72,7 +72,7 @@ const Cart = () => {
     const userId = localStorage.getItem("currentuser");
 
     try {
-      const productResponse = await axios.get(`http://localhost:8080/api/product/${itemId}`);
+      const productResponse = await axios.get(`http://192.168.77.227:8080/api/product/${itemId}`);
       const currentProductQuantity = productResponse.data.stockQuantity;
       console.log(currentProductQuantity)
       setCartItems((prevItems) => {
@@ -134,7 +134,7 @@ const Cart = () => {
     try {
       const token = localStorage.getItem('jwt');
       const response = await axios.put(
-        `http://localhost:8080/users/${userId}/cart/${itemId}`,
+        `http://192.168.77.227:8080/users/${userId}/cart/${itemId}`,
         { quantity: newQuantity },
         {
           headers: { 
@@ -154,7 +154,7 @@ const Cart = () => {
     try {
       const token = localStorage.getItem('jwt');
       const userId = localStorage.getItem('currentuser');
-      await axios.delete(`http://localhost:8080/users/${userId}/cart/${itemId}`, {
+      await axios.delete(`http://192.168.77.227:8080/users/${userId}/cart/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
     } catch (error) {
@@ -299,7 +299,7 @@ export default Cart;
 //       try {
 //         const userId = localStorage.getItem("currentuser");
 //         // Fetch the cart items from the backend
-//         const response = await axios.get(`http://localhost:8080/users/${userId}/cart`, {
+//         const response = await axios.get(`http://192.168.77.227:8080/users/${userId}/cart`, {
 //           headers: {
 //             Authorization: `Bearer ${token}`,
 //           },

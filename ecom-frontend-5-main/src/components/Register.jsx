@@ -1,3 +1,4 @@
+// http://192.168.77.227:8080/jwtcheck
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css'; // Ensure this is imported in your project
@@ -16,7 +17,7 @@ const Register = () => {
             password: password,
         };
         try {
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('http://192.168.77.227:8080/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

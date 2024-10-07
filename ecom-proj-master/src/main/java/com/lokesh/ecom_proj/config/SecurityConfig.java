@@ -34,10 +34,10 @@ public class SecurityConfig {
         return http.csrf(customizer -> customizer.disable())
                 .cors(Customizer.withDefaults())    
                 .authorizeHttpRequests(request -> request
-                        // .requestMatchers("/api/**","/login", "/register").permitAll())
-                        .requestMatchers("/login", "/register","api/**","/users/**").permitAll()
-                        .requestMatchers("/jwtcheck","/profile").authenticated()
-                        .anyRequest().authenticated()
+                                             // .requestMatchers("/api/**","/login", "/register").permitAll())
+                        // .requestMatchers("/login", "/register","api/**","/users/**").permitAll()
+                        // .requestMatchers("/jwtcheck","/profile").authenticated()
+                        .anyRequest().permitAll()
                         // .requestMatchers("/api/product").authenticated()
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,7 +55,9 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry)
             {
                 registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
+                // .allowedOrigins("http://localhost:5173")
+                .allowedOrigins("http://192.168.77.227:5173/") 
+
                 .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                 .allowedHeaders("*")    
                 .allowCredentials(true);

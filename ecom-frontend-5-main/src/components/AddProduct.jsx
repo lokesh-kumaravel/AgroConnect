@@ -1,3 +1,4 @@
+// http://192.168.77.227:8080
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -34,7 +35,7 @@ const AddProduct = () => {
       navigate('/login');
       return;
     }
-    const response = await fetch('http://localhost:8080/jwtcheck', {
+    const response = await fetch('http://192.168.77.227:8080/jwtcheck', {
       method: 'POST',
       headers: {
           'Authorization': 'Bearer ' + token,
@@ -63,7 +64,7 @@ const AddProduct = () => {
 
     formData.append("userid",curid);
     var token = localStorage.getItem('jwt')
-    const response = await fetch('http://localhost:8080/jwtcheck', {
+    const response = await fetch('http://192.168.77.227:8080/jwtcheck', {
       method: 'POST',
       headers: {
           'Authorization': 'Bearer ' + token,
@@ -74,7 +75,7 @@ const AddProduct = () => {
 
     console.log("This is the token: "+token)
     axios
-    .post("http://localhost:8080/api/product", formData, {
+    .post("http://192.168.77.227:8080/api/product", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         // "userid":curid

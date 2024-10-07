@@ -36,6 +36,12 @@ public class UserController {
     //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     //     }
     // }
+    @GetMapping("/")
+    public String getMethodName() {
+        System.out.println("Connecting from the phone: ****************");
+        return new String("Hello");
+    }
+    
     @Autowired
     private AuthService authService;
     @PostMapping("/register")
@@ -47,6 +53,7 @@ public class UserController {
 
     @PostMapping("/login")
 public ResponseEntity<AuthResponse> login(@RequestBody User user) {
+    System.out.println("Here "+user);
         AuthResponse authResponse = authService.verify(user);
         System.out.println("HHHHHHHHHHHH"+authResponse.getUserId());
         return ResponseEntity.ok(authResponse);

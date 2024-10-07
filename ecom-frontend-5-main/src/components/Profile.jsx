@@ -1,3 +1,4 @@
+// http://192.168.77.227:8080
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 // import AppContext from '../Context/C ontext';
@@ -20,7 +21,7 @@ const Profile = () => {
     const fetchProfilePhoto = async () => {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get('http://localhost:8080/profile/profile-photo', {
+        const response = await axios.get('http://192.168.77.227:8080/profile/profile-photo', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -44,7 +45,7 @@ const Profile = () => {
 
     try {
       const token = localStorage.getItem('jwt');
-      const response = await axios.post('http://localhost:8080/profile/upload-photo', formData, {
+      const response = await axios.post('http://192.168.77.227:8080/profile/upload-photo', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -67,7 +68,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:8080/profile', {
+        const response = await axios.get('http://192.168.77.227:8080/profile', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

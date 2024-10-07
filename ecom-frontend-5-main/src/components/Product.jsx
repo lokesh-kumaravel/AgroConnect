@@ -1,3 +1,4 @@
+// http://192.168.77.227:8080/jwtcheck
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../Context/Context";
@@ -15,7 +16,7 @@ const Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/product/${id}`);
+        const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}`);
         setProduct(response.data);
         if (response.data.imageName) {
           fetchImage();
@@ -28,7 +29,7 @@ const Product = () => {
     };
 
     const fetchImage = async () => {
-      const response = await axios.get(`http://localhost:8080/api/product/${id}/image`, { responseType: "blob" });
+      const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}/image`, { responseType: "blob" });
       setImageUrl(URL.createObjectURL(response.data));
     };
 
@@ -54,7 +55,7 @@ const Product = () => {
           // navigate('/login')
           // return alert("User not logged in");
         } else
-      await axios.post(`http://localhost:8080/api/products/${id}/view`, {}, {
+      await axios.post(`http://192.168.77.227:8080/api/products/${id}/view`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
     } catch (error) {
@@ -70,7 +71,7 @@ const Product = () => {
 
   const deleteProduct = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/product/${id}`);
+      await axios.delete(`http://192.168.77.227:8080/api/product/${id}`);
       removeFromCart(id);
       alert("Product deleted successfully");
       refreshData();
@@ -93,10 +94,10 @@ const Product = () => {
       } 
 
     try {
-      const productResponse = await axios.get(`http://localhost:8080/users/quantity/${productId}/cart`);
+      const productResponse = await axios.get(`http://192.168.77.227:8080/users/quantity/${productId}/cart`);
       const availableQuantity = productResponse.data;
 
-      const userCartResponse = await axios.get(`http://localhost:8080/users/currentquantity/${userId}/${productId}/cart`, {
+      const userCartResponse = await axios.get(`http://192.168.77.227:8080/users/currentquantity/${userId}/${productId}/cart`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const cartQuantity = userCartResponse.data;
@@ -312,7 +313,7 @@ export default Product;
 //   useEffect(() => {
 //     const fetchProduct = async () => {
 //       try {
-//         const response = await axios.get(`http://localhost:8080/api/product/${id}`);
+//         const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}`);
 //         setProduct(response.data);
 //         if (response.data.imageName) {
 //           fetchImage();

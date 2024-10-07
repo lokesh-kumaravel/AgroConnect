@@ -8,10 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document
+// @Document
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "user")
 public class User {
 
     @Id

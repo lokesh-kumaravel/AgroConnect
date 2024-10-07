@@ -1,6 +1,8 @@
+// http://192.168.77.227:8080/jwtcheck
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import logoImage from '../assets/image2.png';
 const Navbar = ({ onSelectCategory, onSearch }) => {
   const getInitialTheme = () => {
     const storedTheme = localStorage.getItem("theme");
@@ -38,7 +40,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/products");
+      const response = await axios.get("http://192.168.77.227:8080/api/products");
       setSearchResults(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -51,7 +53,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
       setShowSearchResults(true);
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/products/search?keyword=${value}`
+          `http://192.168.77.227:8080/api/products/search?keyword=${value}`
         );
         setSearchResults(response.data);
         setNoResults(response.data.length === 0);
@@ -101,9 +103,22 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     <header>
       <nav className="navbar navbar-expand-lg fixed-top">
         <div className="container-fluid">
+            <a className="navbar-brand" style={{ fontFamily:"Times New Roman"}}href="">
+        <img
+          src={logoImage} // Use the imported image here
+          alt="Agro Logo"
+          style={{
+            width: '30px', // Set your desired width
+            height: '25px', // Set your desired height
+            marginRight: '15px', // Optional: spacing between image and text
+          }}
+        />
+        AgroConnect
+      </a>
+          {/* <img></img>
           <a className="navbar-brand" href="">
             AgroConnect
-          </a>
+          </a> */}
           <button
             className="navbar-toggler"
             type="button"
@@ -113,7 +128,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span className="navbar-toggler-icon" style={{ backgroundColor: 'green' }} ></span>
+            <span className="navbar-toggler-icon" style={{ backgroundColor: 'lightgrey' }} ></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">

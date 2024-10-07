@@ -1,3 +1,4 @@
+// http://192.168.77.227:8080/jwtcheck
 import React, { useState, useContext } from "react";
 import AppContext from "../Context/Context";
 import { Link, useNavigate } from 'react-router-dom'; 
@@ -22,7 +23,7 @@ function Login() {
         };
     
         try {
-            const response = await fetch('http://localhost:8080/login', {
+            const response = await fetch('http://192.168.77.227:8080/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
