@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'font-awesome/css/font-awesome.min.css'; // Ensure this is imported in your project
-
+import axios from "../axiosProduct";
 const Register = () => {
     const navigate = useNavigate();
     const [name, setName] = useState("");

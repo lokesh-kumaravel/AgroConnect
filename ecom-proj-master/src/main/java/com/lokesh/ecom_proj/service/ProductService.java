@@ -16,6 +16,9 @@ public class ProductService {
     @Autowired
     private ProductRepo repo;
 
+    public List<Product> findProductsByIds(List<String> productIds) {
+        return repo.findAllById(productIds); // Adjust this based on your repository method
+    }
     public List<Product> getAllProducts() {
         return repo.findAll();
     }

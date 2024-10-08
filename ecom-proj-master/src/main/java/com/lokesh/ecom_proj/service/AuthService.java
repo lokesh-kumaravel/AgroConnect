@@ -1,9 +1,13 @@
 package com.lokesh.ecom_proj.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lokesh.ecom_proj.exception.ResourceNotFoundException;
+import com.lokesh.ecom_proj.model.Product;
 import com.lokesh.ecom_proj.model.User;
 import com.lokesh.ecom_proj.repo.UserRepo;
 
@@ -41,4 +45,23 @@ public class AuthService
             throw new RuntimeException("User Not Found"); // Throw an exception for better error handling
         }
     }
+
+    @Autowired
+    private UserRepo userRepository;
+
+    public User findById(String userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Autowired
+    private ProductService productService; 
+    public List<Product> getWishlistProducts(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        
+        List<String> wishlist = user.getWishlist();
+        return productService.findProductsByIds(wishlist); // Fetch products by IDs
+    }
+
 }

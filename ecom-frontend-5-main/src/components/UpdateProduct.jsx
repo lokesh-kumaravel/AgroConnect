@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-
+// import axios from "axios";
+import axios from "../axiosProduct";
 const UpdateProduct = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
@@ -22,13 +22,13 @@ const UpdateProduct = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.77.227:8080/api/product/${id}`
+          `/api/product/${id}`
         );
 
         setProduct(response.data);
         console.log(response.data)
         const responseImage = await axios.get(
-          `http://192.168.77.227:8080/api/product/${id}/image`,
+          `/api/product/${id}/image`,
           { responseType: "blob" }
         );
        const imageFile = await converUrlToFile(responseImage.data,response.data.imageName)
@@ -76,7 +76,7 @@ const UpdateProduct = () => {
     const token = localStorage.getItem('jwt');
     
     try {
-      const response = await axios.put(`http://192.168.77.227:8080/api/product/${id}`, updatedProduct, {
+      const response = await axios.put(`/api/product/${id}`, updatedProduct, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: 'Bearer ' + token,

@@ -136,9 +136,10 @@ public ResponseEntity<CartItem> updateCartItemQuantity(
 @GetMapping("/{userId}/cart")
 // @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
 public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userId) {
+    System.out.println("This is the userId : "+userId);
     User user = userRepository.findById(userId)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
+    System.out.println("****USER"+user.getCart());
     System.out.println("User accessing cart: " + user.getUsername());
     List<CartItem> cartItems = user.getCart();
 
@@ -151,7 +152,7 @@ public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userI
 
         response.add(new CartItemResponse(product, cartItem.getQuantity()));
     }
-
+    System.out.println("This is the response : "+response);
     return ResponseEntity.ok(response);
 }
 @GetMapping("/quantity/{productid}/cart")

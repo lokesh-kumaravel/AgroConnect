@@ -27,4 +27,6 @@ public class User {
     private String imageName;     // The name of the image file
     private String imageType;     // The type of the image (e.g., "image/jpeg", "image/png")
     private byte[] imageData;     // The binary data of the image
+
+    private List<String> wishlist = new ArrayList<>();  // List of liked product IDs
 }

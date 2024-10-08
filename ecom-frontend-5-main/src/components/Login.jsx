@@ -2,6 +2,7 @@
 import React, { useState, useContext } from "react";
 import AppContext from "../Context/Context";
 import { Link, useNavigate } from 'react-router-dom'; 
+import axios from "../axiosProduct";
 function Login() {
 
     const { setUserId,userId } = useContext(AppContext);
@@ -23,18 +24,19 @@ function Login() {
         };
     
         try {
-            const response = await fetch('http://192.168.77.227:8080/login', {
+            const response = await axios.post('/login',loginData, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(loginData),
+                // body: JSON.stringify(loginData),
             });
     
-            const data = await response.json(); // Parse the response
+            // const data = await response.json(); // Parse the response
+            const data = await response.data; // Parse the response
     
             // Check if the response is OK
-            if (response.ok) {
+            if (response) {
                 const { token, userId } = data; // Destructure token and userId from the data
                 setUserId(userId);
                 console.log("Login successful. JWT Token: ", token);

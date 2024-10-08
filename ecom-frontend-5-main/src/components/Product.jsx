@@ -1,9 +1,13 @@
-// http://192.168.77.227:8080/jwtcheck
+
+// // http://192.168.77.227:8080/jwtcheck
+
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../Context/Context";
-import axios from "../axios";
+import axios from "../axiosProduct";
 import GooglePayButton from "@google-pay/button-react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Product = () => {
   const { id } = useParams();
@@ -16,7 +20,7 @@ const Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}`);
+        const response = await axios.get(`/api/product/${id}`);
         setProduct(response.data);
         if (response.data.imageName) {
           fetchImage();
@@ -29,7 +33,7 @@ const Product = () => {
     };
 
     const fetchImage = async () => {
-      const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}/image`, { responseType: "blob" });
+      const response = await axios.get(`/api/product/${id}/image`, { responseType: "blob" });
       setImageUrl(URL.createObjectURL(response.data));
     };
 
@@ -39,25 +43,15 @@ const Product = () => {
   const incrementViewCount = async () => {
     const curUserId = localStorage.getItem("currentuser");
 
-    if (!product) return;
-
-    // Check if the current user is the owner of the product
-    console.log(curUserId)
-    console.log(product.userId)
-    if (curUserId === product.userId) {
-      return; // Don't increment the view count if the user is the owner
-    }
+    if (!product || curUserId === product.userId) return;
 
     try {
       const token = localStorage.getItem('jwt');
-      if (!token)
-        {
-          // navigate('/login')
-          // return alert("User not logged in");
-        } else
-      await axios.post(`http://192.168.77.227:8080/api/products/${id}/view`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      if (token) {
+        await axios.post(`/api/products/${id}/view`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
     } catch (error) {
       console.error("Error incrementing view count:", error);
     }
@@ -71,7 +65,7 @@ const Product = () => {
 
   const deleteProduct = async () => {
     try {
-      await axios.delete(`http://192.168.77.227:8080/api/product/${id}`);
+      await axios.delete(`/api/product/${id}`);
       removeFromCart(id);
       alert("Product deleted successfully");
       refreshData();
@@ -87,17 +81,16 @@ const Product = () => {
 
   const handleAddToCart = async (productId, product) => {
     const token = localStorage.getItem('jwt');
-    if (!token)
-      {
-        navigate('/login')
-        return alert("User not logged in");
-      } 
+    if (!token) {
+      navigate('/login');
+      return alert("User not logged in");
+    }
 
     try {
-      const productResponse = await axios.get(`http://192.168.77.227:8080/users/quantity/${productId}/cart`);
+      const productResponse = await axios.get(`/users/quantity/${productId}/cart`);
       const availableQuantity = productResponse.data;
 
-      const userCartResponse = await axios.get(`http://192.168.77.227:8080/users/currentquantity/${userId}/${productId}/cart`, {
+      const userCartResponse = await axios.get(`/users/currentquantity/${userId}/${productId}/cart`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const cartQuantity = userCartResponse.data;
@@ -110,7 +103,7 @@ const Product = () => {
       if (success) {
         alert("Product added to cart");
       } else {
-        alert("Failed to add product to cart. Please try again. Out of stock!");
+        alert("Failed to add product to cart. Please try again.");
       }
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Failed to add product to cart. Please try again.";
@@ -120,82 +113,77 @@ const Product = () => {
   };
 
   if (loading) {
-    return <h2 className="text-center" style={{ padding: "10rem" }}>Loading...</h2>;
+    return <h2 className="text-center my-5">Loading...</h2>;
   }
 
   if (!product) {
-    return <h2 className="text-center" style={{ padding: "10rem" }}>Product not found.</h2>;
+    return <h2 className="text-center my-5">Product not found.</h2>;
   }
 
   const curid = localStorage.getItem("currentuser");
 
   return (
-    <>
-      <div className="containers" style={{ display: "flex" }}>
-        <img className="left-column-img" src={imageUrl} alt={product.imageName} style={{ width: "50%", height: "auto" }} />
-
-        <div className="right-column" style={{ width: "50%" }}>
+    <div className="container my-5">
+      <div className="row">
+        {/* <div style={{paddingTop:'0px'}}></div> */}
+        <div style={{paddingTop:'0px'}}></div>
+        <div className="col-md-6 d-flex justify-content-center align-items-center">
+  <img 
+    className="img-fluid" 
+    src={imageUrl} 
+    alt={product.imageName} 
+    style={{ width: '80%', height: '300px', objectFit: 'cover' }} 
+  />
+</div>
+        <div className="col-md-6">
           <div className="product-description">
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: "1.2rem", fontWeight: 'lighter' }}>{product.category}</span>
-              <p className="release-date" style={{ marginBottom: "2rem" }}>
-                <h6>Listed: <span><i>{new Date(product.releaseDate).toLocaleDateString()}</i></span></h6>
+            <div className="d-flex justify-content-between">
+              <span className="text-muted">{product.category}</span>
+              <div 
+              tyle={{
+                width: '60%',
+                height: '100vh', // Adjust the height as needed
+                display: 'flex',
+                alignItems: 'center', // Vertically center
+                justifyContent: 'center', // Horizontally center
+                margin: '0 auto', // Center the div itself
+            }}
+              >
+            <h1 className="h3 text-capitalize" style={{color:"red"}}>{product.name}</h1>
+            </div>
+              <p className="release-date">
+                <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
               </p>
             </div>
-
-            <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", textTransform: 'capitalize', letterSpacing: '1px' }}>{product.name}</h1>
-            <i style={{ marginBottom: "3rem" }}>{product.brand}</i>
-            <p style={{ fontWeight: 'bold', fontSize: '1rem', margin: '10px 0px 0px' }}>PRODUCT DESCRIPTION:</p>
-            <p style={{ marginBottom: "1rem" }}>{product.description}</p>
+            <i className="text-muted">{product.brand}</i>
+            <p className="font-weight-bold mt-2" style={{fontFamily:"Times New Roman"}}>PRODUCT DESCRIPTION:</p>
+            <div style={{width:'auto', height:'auto'}}>
+            <p>{product.description}</p>
+            </div>
           </div>
-
-          <div className="product-price">
-            <span style={{ fontSize: "2rem", fontWeight: "bold" }}>₹{product.price}</span>
-            {product.userId !== curid && ( // Show the button only if the user is not the owner
-    <button
-      className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-      onClick={() => handleAddToCart(product.id, product)}  
-      disabled={!product.productAvailable}
-      style={{
-        padding: "1rem 2rem",
-        fontSize: "1rem",
-        backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        marginBottom: "1rem",
-      }}
-    >
-      {product.productAvailable ? "Add to cart" : "Out of Stock"}
-    </button>
-  )}
-
-            {/* <button
-              className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-              onClick={() => handleAddToCart(product.id, product)}  
-              disabled={!product.productAvailable}
-              style={{
-                padding: "1rem 2rem",
-                fontSize: "1rem",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                marginBottom: "1rem",
-              }}
-            >
-              if (curUserId === product.userId){product.productAvailable ? "Add to cart" : "Out of Stock"}
-            </button> */}
-
-            <h6 style={{ marginBottom: "1rem" }}>
-              Stock Available: <i style={{ color: "green", fontWeight: "bold" }}>{product.stockQuantity}</i>
+          <div className="product-price mt-3" >
+            <span className="h4">₹{product.price}</span>
+            {product.userId !== curid && (
+              <button
+                className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
+                onClick={() => handleAddToCart(product.id, product)}
+                disabled={!product.productAvailable}
+              >
+                {product.productAvailable ? "Add to cart" : "Out of Stock"}
+              </button>
+            )}
+            {product.userId === curid && (
+             <div className="mt-1" style={{display:"flex"}}>
+            <h6 className="mt-2">
+              Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
             </h6>
+               <button className="btn btn-warning me-2" style={{backgroundColor:'orange'}} onClick={handleEditClick}>Update</button>
+               <button className="btn btn-danger" style={{backgroundColor:'red'}} onClick={deleteProduct}>Delete</button>
+             </div>
+           )}
 
-            {/* Google Pay Purchase Button */}
             {product.productAvailable && (
-              <div>
+              <div className="mt-3">
                 <hr />
                 <GooglePayButton
                   environment="TEST"
@@ -225,7 +213,7 @@ const Product = () => {
                     transactionInfo: {
                       totalPriceStatus: 'FINAL',
                       totalPriceLabel: 'Total',
-                      totalPrice: '100',
+                      totalPrice: product.price.toString(),
                       currencyCode: 'USD',
                       countryCode: 'US',
                     },
@@ -249,53 +237,319 @@ const Product = () => {
                 />
               </div>
             )}
-
           </div>
-
-          {/* Conditionally render Edit and Delete buttons */}
-          {product.userId === curid && ( 
-            <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={handleEditClick}
-                style={{
-                  padding: "1rem 2rem",
-                  fontSize: "1rem",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Update
-              </button>
-              <button
-                className="btn btn-danger"
-                type="button"
-                onClick={deleteProduct}
-                style={{
-                  padding: "1rem 2rem",
-                  fontSize: "1rem",
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                Delete
-              </button>
+          {/* {product.userId === curid && (
+            <div className="mt-1">
+              <button className="btn btn-warning me-2" onClick={handleEditClick}>Update</button>
+              <button className="btn btn-danger" onClick={deleteProduct}>Delete</button>
             </div>
-          )}
+          )} */}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default Product;
+
+// import { useNavigate, useParams } from "react-router-dom";
+// import { useContext, useEffect, useState } from "react";
+// import AppContext from "../Context/Context";
+// // import axios from "../axios";
+// import axios from "../axiosProduct";
+// import GooglePayButton from "@google-pay/button-react";
+
+// const Product = () => {
+//   const { id } = useParams();
+//   const { addToCart, removeFromCart, refreshData, userId } = useContext(AppContext);
+//   const [product, setProduct] = useState(null);
+//   const [imageUrl, setImageUrl] = useState("");
+//   const [loading, setLoading] = useState(true);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const fetchProduct = async () => {
+//       try {
+//         const response = await axios.get(`/api/product/${id}`);
+//         setProduct(response.data);
+//         if (response.data.imageName) {
+//           fetchImage();
+//         }
+//       } catch (error) {
+//         console.error("Error fetching product:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     const fetchImage = async () => {
+//       const response = await axios.get(`/api/product/${id}/image`, { responseType: "blob" });
+//       setImageUrl(URL.createObjectURL(response.data));
+//     };
+
+//     fetchProduct();
+//   }, [id]);
+
+//   const incrementViewCount = async () => {
+//     const curUserId = localStorage.getItem("currentuser");
+
+//     if (!product) return;
+
+//     // Check if the current user is the owner of the product
+//     console.log(curUserId)
+//     console.log(product.userId)
+//     if (curUserId === product.userId) {
+//       return; // Don't increment the view count if the user is the owner
+//     }
+
+//     try {
+//       const token = localStorage.getItem('jwt');
+//       if (!token)
+//         {
+//           // navigate('/login')
+//           // return alert("User not logged in");
+//         } else
+//       await axios.post(`/api/products/${id}/view`, {}, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+//     } catch (error) {
+//       console.error("Error incrementing view count:", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (product) {
+//       incrementViewCount();
+//     }
+//   }, [product]);
+
+//   const deleteProduct = async () => {
+//     try {
+//       await axios.delete(`/api/product/${id}`);
+//       removeFromCart(id);
+//       alert("Product deleted successfully");
+//       refreshData();
+//       navigate("/");
+//     } catch (error) {
+//       console.error("Error deleting product:", error);
+//     }
+//   };
+
+//   const handleEditClick = () => {
+//     navigate(`/product/update/${id}`);
+//   };
+
+//   const handleAddToCart = async (productId, product) => {
+//     const token = localStorage.getItem('jwt');
+//     if (!token)
+//       {
+//         navigate('/login')
+//         return alert("User not logged in");
+//       } 
+
+//     try {
+//       const productResponse = await axios.get(`/users/quantity/${productId}/cart`);
+//       const availableQuantity = productResponse.data;
+
+//       const userCartResponse = await axios.get(`/users/currentquantity/${userId}/${productId}/cart`, {
+//         headers: { Authorization: `Bearer ${token}` }
+//       });
+//       const cartQuantity = userCartResponse.data;
+
+//       if (cartQuantity >= availableQuantity) {
+//         return alert("Out of stock");
+//       }
+
+//       const success = await addToCart(product);
+//       if (success) {
+//         alert("Product added to cart");
+//       } else {
+//         alert("Failed to add product to cart. Please try again. Out of stock!");
+//       }
+//     } catch (error) {
+//       const errorMessage = error.response?.data?.message || "Failed to add product to cart. Please try again.";
+//       alert(errorMessage);
+//       console.error("Error adding to cart", error);
+//     }
+//   };
+
+//   if (loading) {
+//     return <h2 className="text-center" style={{ padding: "10rem" }}>Loading...</h2>;
+//   }
+
+//   if (!product) {
+//     return <h2 className="text-center" style={{ padding: "10rem" }}>Product not found.</h2>;
+//   }
+
+//   const curid = localStorage.getItem("currentuser");
+
+//   return (
+//     <>
+//       <div className="containers" style={{ display: "flex" }}>
+//         <img className="left-column-img" src={imageUrl} alt={product.imageName} style={{ width: "50%", height: "auto" }} />
+
+//         <div className="right-column" style={{ width: "50%" }}>
+//           <div className="product-description">
+//             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+//               <span style={{ fontSize: "1.2rem", fontWeight: 'lighter' }}>{product.category}</span>
+//               <p className="release-date" style={{ marginBottom: "2rem" }}>
+//                 <h6>Listed: <span><i>{new Date(product.releaseDate).toLocaleDateString()}</i></span></h6>
+//               </p>
+//             </div>
+
+//             <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", textTransform: 'capitalize', letterSpacing: '1px' }}>{product.name}</h1>
+//             <i style={{ marginBottom: "3rem" }}>{product.brand}</i>
+//             <p style={{ fontWeight: 'bold', fontSize: '1rem', margin: '10px 0px 0px' }}>PRODUCT DESCRIPTION:</p>
+//             <p style={{ marginBottom: "1rem" }}>{product.description}</p>
+//           </div>
+
+//           <div className="product-price">
+//             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>₹{product.price}</span>
+//             {product.userId !== curid && ( // Show the button only if the user is not the owner
+//     <button
+//       className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
+//       onClick={() => handleAddToCart(product.id, product)}  
+//       disabled={!product.productAvailable}
+//       style={{
+//         padding: "1rem 2rem",
+//         fontSize: "1rem",
+//         backgroundColor: "#007bff",
+//         color: "white",
+//         border: "none",
+//         borderRadius: "5px",
+//         cursor: "pointer",
+//         marginBottom: "1rem",
+//       }}
+//     >
+//       {product.productAvailable ? "Add to cart" : "Out of Stock"}
+//     </button>
+//   )}
+
+//             {/* <button
+//               className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
+//               onClick={() => handleAddToCart(product.id, product)}  
+//               disabled={!product.productAvailable}
+//               style={{
+//                 padding: "1rem 2rem",
+//                 fontSize: "1rem",
+//                 backgroundColor: "#007bff",
+//                 color: "white",
+//                 border: "none",
+//                 borderRadius: "5px",
+//                 cursor: "pointer",
+//                 marginBottom: "1rem",
+//               }}
+//             >
+//               if (curUserId === product.userId){product.productAvailable ? "Add to cart" : "Out of Stock"}
+//             </button> */}
+
+//             <h6 style={{ marginBottom: "1rem" }}>
+//               Stock Available: <i style={{ color: "green", fontWeight: "bold" }}>{product.stockQuantity}</i>
+//             </h6>
+
+//             {/* Google Pay Purchase Button */}
+//             {product.productAvailable && (
+//               <div>
+//                 <hr />
+//                 <GooglePayButton
+//                   environment="TEST"
+//                   paymentRequest={{
+//                     apiVersion: 2,
+//                     apiVersionMinor: 0,
+//                     allowedPaymentMethods: [
+//                       {
+//                         type: 'CARD',
+//                         parameters: {
+//                           allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+//                           allowedCardNetworks: ['MASTERCARD', 'VISA'],
+//                         },
+//                         tokenizationSpecification: {
+//                           type: 'PAYMENT_GATEWAY',
+//                           parameters: {
+//                             gateway: 'example',
+//                             gatewayMerchantId: 'exampleGatewayMerchantId',
+//                           },
+//                         },
+//                       },
+//                     ],
+//                     merchantInfo: {
+//                       merchantId: '12345678901234567890',
+//                       merchantName: 'Demo Merchant',
+//                     },
+//                     transactionInfo: {
+//                       totalPriceStatus: 'FINAL',
+//                       totalPriceLabel: 'Total',
+//                       totalPrice: '100',
+//                       currencyCode: 'USD',
+//                       countryCode: 'US',
+//                     },
+//                     shippingAddressRequired: true,
+//                     callbackIntents: ['SHIPPING_ADDRESS', 'PAYMENT_AUTHORIZATION'],
+//                   }}
+//                   onLoadPaymentData={paymentRequest => {
+//                     console.log('Success', paymentRequest);
+//                   }}
+//                   onPaymentAuthorized={paymentData => {
+//                     console.log('Payment Authorised Success', paymentData);
+//                     return { transactionState: 'SUCCESS' };
+//                   }}
+//                   onPaymentDataChanged={paymentData => {
+//                     console.log('On Payment Data Changed', paymentData);
+//                     return {};
+//                   }}
+//                   existingPaymentMethodRequired='false'
+//                   buttonColor='black'
+//                   buttonType='Buy'
+//                 />
+//               </div>
+//             )}
+
+//           </div>
+
+//           {/* Conditionally render Edit and Delete buttons */}
+//           {product.userId === curid && ( 
+//             <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
+//               <button
+//                 className="btn btn-primary"
+//                 type="button"
+//                 onClick={handleEditClick}
+//                 style={{
+//                   padding: "1rem 2rem",
+//                   fontSize: "1rem",
+//                   backgroundColor: "#007bff",
+//                   color: "white",
+//                   border: "none",
+//                   borderRadius: "5px",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 Update
+//               </button>
+//               <button
+//                 className="btn btn-danger"
+//                 type="button"
+//                 onClick={deleteProduct}
+//                 style={{
+//                   padding: "1rem 2rem",
+//                   fontSize: "1rem",
+//                   backgroundColor: "#dc3545",
+//                   color: "white",
+//                   border: "none",
+//                   borderRadius: "5px",
+//                   cursor: "pointer",
+//                 }}
+//               >
+//                 Delete
+//               </button>
+//             </div>
+//           )}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Product;
 
 // import { useNavigate, useParams } from "react-router-dom";
 // import { useContext, useEffect, useState } from "react";
@@ -313,7 +567,7 @@ export default Product;
 //   useEffect(() => {
 //     const fetchProduct = async () => {
 //       try {
-//         const response = await axios.get(`http://192.168.77.227:8080/api/product/${id}`);
+//         const response = await axios.get(`/api/product/${id}`);
 //         setProduct(response.data);
 //         if (response.data.imageName) {
 //           fetchImage();
@@ -751,3 +1005,14 @@ export default Product;
 // // };
 
 // // export default Product;
+
+
+
+
+
+
+
+
+
+
+

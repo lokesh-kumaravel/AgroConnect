@@ -1,3 +1,23 @@
+.btn {
+    background-color: #007bff; /* Primary color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade for hover */
+    transform: scale(1.05); /* Slightly enlarge the button */
+}
+
+.btn:active {
+    transform: scale(0.95); /* Scale down on click */
+}
+
 .profile-card {
     /* padding-top: 30%; */
     display: flex;
