@@ -121,7 +121,6 @@ const Profile = () => {
 
   return (
     <>
-    <Wishlist/>
     <div style={{padding:40}}></div>
     <div className="profile-card">
     <div>
@@ -309,6 +308,8 @@ const Profile = () => {
             ); 
 })}
 </div>
+<Wishlist/>
+
     </>
   );
 };

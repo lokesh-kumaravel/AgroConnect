@@ -68,11 +68,9 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     }
   };
 
-  const handleCategorySelect = (category) => {
-    console.log(category)
-    navigate('/')
-    setSelectedCategory(category);
-    onSelectCategory(category);
+  const handleClick = () => {
+    navigate('/wishlist')
+    // onChange();
   };
 
   const toggleTheme = () => {
@@ -104,7 +102,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     <header>
   <nav className="navbar navbar-expand-lg fixed-top">
     <div className="container-fluid">
-      <a className="navbar-brand" style={{ fontFamily: "Times New Roman" }} href="">
+      <a className="navbar-brand" style={{ fontFamily: "Times New Roman" }} href="/">
         <img
           src={logoImage}
           alt="Agro Logo"
@@ -117,7 +115,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         AgroConnect
       </a>
       {/* Move search bar here to make it always visible */}
-      <div className="d-flex align-items-center" style={{width:'30%'}}>
+      <div className="d-flex align-items-center" style={{width:'30%', paddingLeft:'0px'}}>
         <input
         // style={{backgroundColor:'lightgray',text:'red'}}
         style={{borderColor:'black'}}
@@ -146,8 +144,64 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
           </ul>
         )}
       </div>
+      <div style={{width:'13%'}}>
+      <div
+      onClick={handleClick}
+      style={{
+        width: '40px',
+        height: '40px',
+        // backgroundColor: 'green',
+        clipPath: 'polygon(50% 0%, 100% 30%, 100% 100%, 0% 100%, 0% 30%)',
+        cursor: 'pointer',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <span style={{ color: 'white', fontSize: '18px' }}>💚</span>
+    </div>
+      </div>
+      <div className="d-block d-sm-none">
       <button
-        className="navbar-toggler"
+  style={{ paddingLeft: '0px', background: 'transparent', border: 'none',width:'5%' }}
+  // className="navbar-toggler"
+  type="button"
+  data-bs-toggle="collapse"
+  data-bs-target="#navbarSupportedContent"
+  aria-controls="navbarSupportedContent"
+  aria-expanded="false"
+  aria-label="Toggle navigation"
+>
+  <span style={{
+      display: 'block',
+      width: '6px',
+      height: '6px',
+      borderRadius: '250%',
+      backgroundColor: 'lightgrey',
+      margin: '2px auto' // Center the dots and add space
+  }}></span>
+  <span style={{
+      display: 'block',
+      width: '6px',
+      height: '6px',
+      borderRadius: '200%',
+      backgroundColor: 'lightgrey',
+      margin: '2px auto'
+  }}></span>
+  <span style={{
+      display: 'block',
+      width: '6px',
+      height: '6px',
+      borderRadius: '200%',
+      backgroundColor: 'lightgrey',
+      margin: '2px auto'
+  }}></span>
+</button>
+</div>
+
+      {/* <button
+      style={{paddingLeft:'5px'}}
+        // className="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarSupportedContent"
@@ -155,8 +209,8 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon" style={{ backgroundColor: 'lightgrey' }}></span>
-      </button>
+        <span className="navbar-toggler-icon" style={{ backgroundColor: 'lightgrey',}}></span>
+      </button> */}
 
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav me-auto mb-2 mb-lg-0">

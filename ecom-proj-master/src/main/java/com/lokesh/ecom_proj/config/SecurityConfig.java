@@ -58,7 +58,7 @@ public class SecurityConfig {
                 registry.addMapping("/**")
                 // .allowedOrigins("http://localhost:5173")
                 // .allowedOrigins("http://192.168.77.227:5173/") 
-                .allowedOrigins("http://192.168.77.227:5173/") 
+                .allowedOrigins("http://172.16.2.211:5173/") 
 
                 .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                 .allowedHeaders("*")    

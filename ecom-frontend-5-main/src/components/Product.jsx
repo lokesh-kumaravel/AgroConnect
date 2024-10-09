@@ -8,6 +8,7 @@ import AppContext from "../Context/Context";
 import axios from "../axiosProduct";
 import GooglePayButton from "@google-pay/button-react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ReviewComponent from "./ReviewComponent";
 
 const Product = () => {
   const { id } = useParams();
@@ -163,6 +164,9 @@ const Product = () => {
           </div>
           <div className="product-price mt-3" >
             <span className="h4">₹{product.price}</span>
+            <h6 className="mt-2">
+              Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+            </h6>
             {product.userId !== curid && (
               <button
                 className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
@@ -172,15 +176,16 @@ const Product = () => {
                 {product.productAvailable ? "Add to cart" : "Out of Stock"}
               </button>
             )}
+          
             {product.userId === curid && (
-             <div className="mt-1" style={{display:"flex"}}>
-            <h6 className="mt-2">
-              Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
-            </h6>
+              <div className="mt-1" style={{display:"flex"}}>
                <button className="btn btn-warning me-2" style={{backgroundColor:'orange'}} onClick={handleEditClick}>Update</button>
                <button className="btn btn-danger" style={{backgroundColor:'red'}} onClick={deleteProduct}>Delete</button>
              </div>
            )}
+           {/* this is the review content */}
+           {/* {product.userId !== curid &&(
+           <ReviewComponent productId={product.id} />)} */}
 
             {product.productAvailable && (
               <div className="mt-3">

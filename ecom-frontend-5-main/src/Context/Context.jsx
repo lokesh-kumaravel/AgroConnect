@@ -83,7 +83,7 @@ export const AppProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('jwt');
       if (token) {
-        const response = await axios.put(`http://192.168.77.227:8080/users/${userId}/cart`, cartItem, {
+        const response = await axios.put(`http://172.16.2.211:8080/users/${userId}/cart`, cartItem, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.status >= 200 && response.status < 300) {
@@ -142,7 +142,7 @@ export const AppProvider = ({ children }) => {
     if (userId && token) {
       const fetchCart = async (userId) => {
         try {
-          const response = await axios.get(`http://192.168.77.227:8080/users/${userId}/cart`, {
+          const response = await axios.get(`http://172.16.2.211:8080/users/${userId}/cart`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setCart(response.data.cart);
