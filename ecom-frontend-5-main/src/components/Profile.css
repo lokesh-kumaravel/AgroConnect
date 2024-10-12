@@ -1,5 +1,5 @@
 .btn {
-    background-color: #007bff; /* Primary color */
+    background-color: #007bff; 
     color: white;
     border: none;
     padding: 10px 20px;
@@ -10,47 +10,47 @@
 }
 
 .btn:hover {
-    background-color: #0056b3; /* Darker shade for hover */
-    transform: scale(1.05); /* Slightly enlarge the button */
+    background-color: #0056b3;
+    transform: scale(1.05);
 }
 
 .btn:active {
-    transform: scale(0.95); /* Scale down on click */
+    transform: scale(0.95); 
 }
 
 .profile-card {
     /* padding-top: 30%; */
     display: flex;
-    align-items: center; /* Center items vertically */
-    background-color: #fff; /* White background for the card */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    align-items: center; 
+    background-color: #fff; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 20px; 
 }
 
 .profile-photo {
-    width: 80px; /* Set the width of the profile photo */
-    height: 80px; /* Set the height of the profile photo */
-    border-radius: 50%; /* Make it a circle */
-    margin-right: 20px; /* Space between photo and text */
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
 }
 
 .profile-info {
     display: flex;
-    flex-direction: column; /* Stack info vertically */
+    flex-direction: column;
 }
 
 .profile-name {
-    margin: 0; /* Remove default margin */
-    font-size: 1.5rem; /* Font size for name */
-    font-weight: bold; /* Bold font for the name */
+    margin: 0; 
+    font-size: 1.5rem; 
+    font-weight: bold;
 }
 
 .profile-email, .profile-products {
-    margin: 5px 0; /* Add space between email and products */
-    font-size: 1rem; /* Font size for email and products */
-    color: #555; /* Dark gray color for text */
+    margin: 5px 0; 
+    font-size: 1rem;
+    color: #555; 
 }
 
 

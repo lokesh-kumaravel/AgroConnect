@@ -143,7 +143,6 @@ const Profile = () => {
           />
         </>
       ) : (
-        // Placeholder with a clickable symbol for adding a photo
         <div onClick={handlePlaceholderClick} style={{ cursor: 'pointer' }}>
           <div
             style={{

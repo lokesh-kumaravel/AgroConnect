@@ -18,19 +18,17 @@ const AppContext = createContext({
 });
 
 export const AppProvider = ({ children }) => {
-  // const navigate = useNavigate(); // Ensure this is inside AppProvider
+  // const navigate = useNavigate(); 
   const [username, setUsername] = useState(null);
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState("");
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
   const [userId, setUserId] = useState(null);
 
-  // Set userId from localStorage on initial render
   useEffect(() => {
     const storedUserId = localStorage.getItem('currentuser');
     if (storedUserId) {
       setUserId(storedUserId);
-      // fetchUsername(storedUserId);
     }
   }, []);
 

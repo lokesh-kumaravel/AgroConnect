@@ -29,20 +29,18 @@ const Home = ({ selectedCategory }) => {
     const currentLiked = likedProducts[productId];
     const newLikedState = !currentLiked;
 
-    // Update local state
     setLikedProducts(prev => ({
       ...prev,
       [productId]: newLikedState,
     }));
 
-    // Update the wishlist on the server
     await updateWishlist(productId, newLikedState);
   };
 
   const updateWishlist = async (productId, liked) => {
     try {
 
-      const userId = localStorage.getItem("currentuser"); // Replace with actual user ID
+      const userId = localStorage.getItem("currentuser"); 
       await axios.post(`/api/wishlist/${userId}`, {
         productId,
         liked
@@ -56,9 +54,9 @@ const Home = ({ selectedCategory }) => {
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const userId = localStorage.getItem("currentuser"); // Replace with actual user ID
+        const userId = localStorage.getItem("currentuser"); 
         const response = await axios.get(`/api/wishlist/${userId}`);
-        const wishlist = response.data; // Assuming this returns an array of product IDs
+        const wishlist = response.data; 
 
         const initialLikedProducts = {};
         wishlist.forEach(id => {
@@ -75,17 +73,16 @@ const Home = ({ selectedCategory }) => {
   }, []);
 
 
-  // Function to handle adding product to the cart
   const handleAddToCart = async (product) => {
-    const token = localStorage.getItem("jwt"); // Check for JWT token
+    const token = localStorage.getItem("jwt"); 
     if (!token) {
       console.log("No token found, redirecting to login.");
-      navigate("/login"); // If no token, redirect to login page
+      navigate("/login"); 
       return;
     }
 
     try {
-      setLoading(true); // Show loader while validating token
+      setLoading(true);
       const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
         method: 'POST',
         headers: {
@@ -98,11 +95,10 @@ const Home = ({ selectedCategory }) => {
         navigate('/login');
         return;
       }
-      setLoading(false); // Hide loader after token validation
+      setLoading(false);
       const userDetails = await response.json();
       console.log(userDetails);
 
-      // Add product to the cart if token is valid
       const res = await addToCart(product);
       if (res) {
         alert("Product added to cart!");
@@ -114,7 +110,6 @@ const Home = ({ selectedCategory }) => {
     }
   };
 
-  // Fetch and update the products only once when the component mounts
   useEffect(() => {
     if (!isDataFetched) {
       refreshData();
@@ -122,9 +117,8 @@ const Home = ({ selectedCategory }) => {
     }
   }, [refreshData, isDataFetched, data]);
 
-  // Fetch product images when data is available
   useEffect(() => {
-    setLoading(true); // Show loader while fetching images
+    setLoading(true); 
     if (data && data.length > 0) {
       const fetchImagesAndUpdateProducts = async () => {
         const updatedProducts = await Promise.all(
@@ -149,28 +143,22 @@ const Home = ({ selectedCategory }) => {
         setProducts(updatedProducts);
       };
 
-      // Simulate a delay of 3 seconds for the loader
       setTimeout(() => {
         fetchImagesAndUpdateProducts().then(() => {
-          setLoading(false); // Hide loader after 3 seconds
+          setLoading(false); 
         });
-      }, 2000); // Set the timeout to 3 seconds
+      }, 2000); 
     }
   }, [data]);
 
-  // Show loader while loading is true
   if (loading) {
     return <Loader />;
   }
 
-  // Show loader if data is still being fetched
-
-  // Filter products based on the selected category
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
-  // Handle errors
   if (isError) {
     return (
       <h2 className="text-center" style={{ padding: "18rem" }}>
@@ -187,9 +175,9 @@ const Home = ({ selectedCategory }) => {
         style={{
           marginTop: "65px",
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", // Adjusted to a smaller min width
+          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", 
           padding: "8px",
-          gap: "15px", // Optional: Adds space between cards
+          gap: "15px", 
         }}
       >
         {filteredProducts.length === 0 ? (
@@ -220,8 +208,8 @@ const Home = ({ selectedCategory }) => {
                   justifyContent: "flex-start",
                   alignItems: "stretch",
                   height: '100%',
-                  width: "100%", // Use full width of grid column
-                  maxWidth: "200px", // Limit max width for larger screens
+                  width: "100%", 
+                  maxWidth: "200px",
                 }}
                 key={id}
               >
@@ -234,11 +222,11 @@ const Home = ({ selectedCategory }) => {
                     alt={name}
                     style={{
                       width: "100%",
-                      height: "90px", // Reduced height
+                      height: "90px", 
                       objectFit: "cover",
                       padding: "5px",
                       margin: "0",
-                      borderRadius: "10px 10px 0 0", // Slightly adjust border radius
+                      borderRadius: "10px 10px 0 0", 
                     }}
                   />
                 </Link>
@@ -275,7 +263,7 @@ const Home = ({ selectedCategory }) => {
                       <div className="heart-container" style={{ width: '50%', height: '50%' }}>
                         <input
                           type="checkbox"
-                          id={`like-${product.id}`} // Make sure the ID is unique for each product
+                          id={`like-${product.id}`} 
                           checked={likedProducts[product.id] || false}
                           onChange={() => toggleLike(product.id)}
                           style={{ display: 'none' }}
@@ -318,7 +306,7 @@ const Home = ({ selectedCategory }) => {
                     </div>
                     <i
                       className="card-brand"
-                      style={{ fontFamily: "Times New Roman", fontSize: "0.7rem" }} // Reduced font size
+                      style={{ fontFamily: "Times New Roman", fontSize: "0.7rem" }} 
                     >
                       {"Brand : " + brand}
                     </i>
@@ -326,7 +314,7 @@ const Home = ({ selectedCategory }) => {
                     <div className="home-cart-price">
                     <h5
                       className="card-text"
-                      style={{ fontWeight: "600", fontSize: "1rem", marginBottom: '6px' }} // Reduced font size
+                      style={{ fontWeight: "600", fontSize: "1rem", marginBottom: '6px' }}
                     >
                       <i className="bi bi-currency-rupee"></i>
                       {price}
@@ -341,10 +329,10 @@ const Home = ({ selectedCategory }) => {
                         fontFamily: "Times New Roman",
                         height: '130%',
                         margin: '0px 0px 0px ',
-                        padding: '6px 15px', // Adjust padding for smaller size
-                        fontSize: '0.8rem', // Adjust font size
-                        width: '110%', // Set a specific width if needed
-                        maxWidth: '150px', // Limit max width
+                        padding: '6px 15px', 
+                        fontSize: '0.8rem', 
+                        width: '110%', 
+                        maxWidth: '150px',
                       }}
                       onClick={(e) => {
                         e.preventDefault();

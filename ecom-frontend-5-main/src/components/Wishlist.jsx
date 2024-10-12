@@ -43,16 +43,13 @@ const Wishlist = () => {
     const currentLiked = likedProducts[productId];
     const newLikedState = !currentLiked;
   
-    // Update local state for liked products
     setLikedProducts(prev => ({
       ...prev,
       [productId]: newLikedState,
     }));
   
-    // Update the wishlist on the server
     await updateWishlist(productId, newLikedState);
   
-    // Update the wishlist state based on the new liked state
     setWishlist(prevWishlist => 
       prevWishlist.filter(product => product.id !== productId || newLikedState)
     );
@@ -76,17 +73,16 @@ const Wishlist = () => {
       setLoading(true);
       try {
         const response = await axios.get(`/api/wishlist/products/${userId}`);
-        const fetchedWishlist = response.data; // Set fetched wishlist data
+        const fetchedWishlist = response.data;
         
-        // Initialize likedProducts with all products set to true
         const initialLikedProducts = {};
         fetchedWishlist.forEach(product => {
-          initialLikedProducts[product.id] = true; // Set all to liked
+          initialLikedProducts[product.id] = true; 
         });
         
-        setLikedProducts(initialLikedProducts); // Update the likedProducts state
-        setWishlist(fetchedWishlist); // Update the wishlist state
-        console.log(fetchedWishlist); // Log all products fetched
+        setLikedProducts(initialLikedProducts); 
+        setWishlist(fetchedWishlist); 
+        console.log(fetchedWishlist);
       } catch (error) {
         console.error('Error fetching wishlist:', error);
       } finally {
@@ -124,7 +120,7 @@ const Wishlist = () => {
           return { ...product, imageUrl };
         } catch (error) {
           console.error(`Error fetching image for product ID: ${product.id}`, error);
-          return { ...product, imageUrl: "placeholder-image-url" }; // Placeholder in case of error
+          return { ...product, imageUrl: "placeholder-image-url" }; 
         }
       })
     );
@@ -140,15 +136,15 @@ const Wishlist = () => {
   }, [wishlist]);
 
   const handleAddToCart = async (product) => {
-    const token = localStorage.getItem("jwt"); // Check for JWT token
+    const token = localStorage.getItem("jwt"); 
     if (!token) {
       console.log("No token found, redirecting to login.");
-      navigate("/login"); // If no token, redirect to login page
+      navigate("/login"); 
       return;
     }
 
     try {
-      setLoading(true); // Show loader while validating token
+      setLoading(true); 
       const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
         method: 'POST',
         headers: {
@@ -161,11 +157,9 @@ const Wishlist = () => {
         navigate('/login');
         return;
       }
-      setLoading(false); // Hide loader after token validation
+      setLoading(false); 
       const userDetails = await response.json();
       console.log(userDetails);
-
-      // Add product to the cart if token is valid
       const res = await addToCart(product);
       if (res) {
         alert("Product added to cart!");
@@ -272,7 +266,7 @@ const Wishlist = () => {
                       <div className="heart-container" style={{ width: '50%', height: '50%' }}>
                       <input
                         type="checkbox"
-                        id={`like-${product.id}`} // Make sure the ID is unique for each product
+                        id={`like-${product.id}`} 
                         checked={likedProducts[product.id] || false}
                         onChange={() => toggleLike(product.id)}
                         style={{ display: 'none' }}

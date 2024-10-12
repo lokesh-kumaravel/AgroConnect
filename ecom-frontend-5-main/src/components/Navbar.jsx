@@ -20,13 +20,11 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("jwt"));
 
-  // Track token updates
   useEffect(() => {
     const handleStorageChange = () => {
       setToken(localStorage.getItem("jwt"));
     };
 
-    // Listen for storage changes
     window.addEventListener("storage", handleStorageChange);
 
     return () => {
@@ -34,7 +32,6 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     };
   }, []);
 
-  // Fetch data when component mounts
   useEffect(() => {
     fetchData();
   }, []);
@@ -86,7 +83,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     localStorage.removeItem("currentuser");
-    setToken(null); // Update state to re-render the navbar
+    setToken(null); 
   };
 
   const categories = [
@@ -178,7 +175,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
       height: '6px',
       borderRadius: '250%',
       backgroundColor: 'lightgrey',
-      margin: '2px auto' // Center the dots and add space
+      margin: '2px auto' 
   }}></span>
   <span style={{
       display: 'block',

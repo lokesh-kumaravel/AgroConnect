@@ -13,7 +13,7 @@ const ReviewComponent = ({ productId }) => {
       setLoading(true);
       try {
         const response = await axios.get(`/products/${productId}/reviews`);
-        setReviews(response.data); // No need to call .json() here
+        setReviews(response.data); 
       } catch (error) {
         setError('Failed to fetch reviews.');
       } finally {
@@ -38,7 +38,7 @@ const ReviewComponent = ({ productId }) => {
       setReviewText('');
     } catch (error) {
       setError('Error submitting review. Please try again.');
-      console.error(error); // Log the error for debugging
+      console.error(error); 
     }
   };
 

@@ -7,20 +7,20 @@ function Login() {
 
     const { setUserId,userId } = useContext(AppContext);
 
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
 
     const [email, setEmail] = useState("lokesh@gmail.com");
     const [password, setPassword] = useState("123");
-    const [error, setError] = useState(null); // State for error message
+    const [error, setError] = useState(null); 
 
     const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault(); 
         console.log(email);
         console.log(password);
     
         const loginData = {
-            mailId: email, // Assuming email is sent as mailId
-            password: password // Assuming password is correctly passed
+            mailId: email, 
+            password: password
         };
     
         try {
@@ -33,21 +33,20 @@ function Login() {
             });
     
             // const data = await response.json(); // Parse the response
-            const data = await response.data; // Parse the response
+            const data = await response.data; 
     
-            // Check if the response is OK
             if (response) {
-                const { token, userId } = data; // Destructure token and userId from the data
+                const { token, userId } = data; 
                 setUserId(userId);
                 console.log("Login successful. JWT Token: ", token);
                 console.log("UserId: ", userId);
                 localStorage.setItem("currentuser",userId)
-                localStorage.setItem('jwt', token); // Store the token after login
+                localStorage.setItem('jwt', token); 
                 
-                navigate('/'); // Redirect to the dashboard
+                navigate('/');
             } else {
-                const errorMessage = data?.message || "Login failed"; // Get error message from response or set a default message
-                setError(errorMessage); // Set the error message
+                const errorMessage = data?.message || "Login failed"; 
+                setError(errorMessage); 
                 console.error   ("Login failed:", errorMessage);
             }   
         } catch (error) {

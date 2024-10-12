@@ -12,7 +12,7 @@ const Cart = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedItems, setSelectedItems] = useState(new Set()); // Track selected items
+  const [selectedItems, setSelectedItems] = useState(new Set()); 
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -28,9 +28,9 @@ const Cart = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("This is the Response : "+response.data)
-        const cartData = response.data; // This will now be a list of CartItemResponse
+        const cartData = response.data;
         const productDetails = cartData.map(cartItem => {
-          const price = parseFloat(cartItem.product.price) || 0; // Adjust based on how product details are structured
+          const price = parseFloat(cartItem.product.price) || 0; 
           return {
             ...cartItem.product,
             quantity: cartItem.quantity,
@@ -50,8 +50,6 @@ const Cart = () => {
   
     fetchCartItems();
   }, [navigate]);
-
-  // Calculate total price whenever cartItems are updated
   useEffect(() => {
     const total = cartItems.reduce((acc, item) => {
       const itemPrice = parseFloat(item.price) || 0;
@@ -170,9 +168,9 @@ const Cart = () => {
     setSelectedItems(prevSelectedItems => {
       const updatedSelectedItems = new Set(prevSelectedItems);
       if (updatedSelectedItems.has(itemId)) {
-        updatedSelectedItems.delete(itemId); // Deselect item
+        updatedSelectedItems.delete(itemId); 
       } else {
-        updatedSelectedItems.add(itemId); // Select item
+        updatedSelectedItems.add(itemId); 
       }
       return updatedSelectedItems;
     });
@@ -187,7 +185,6 @@ const Cart = () => {
 
     const selectedTotalPrice = calculateSelectedTotalPrice();
     console.log("Selected Total Price:", selectedTotalPrice);
-    // Further checkout logic here (e.g., API call)
   };
 
   return (
@@ -207,13 +204,12 @@ const Cart = () => {
                     <input
                     style={{
                       marginRight: "10px",
-                      transform: "scale(1.5)", // Adjust the scale factor as needed
+                      transform: "scale(1.5)", 
                       cursor: "pointer"
                     }}
                       type="checkbox"
                       checked={selectedItems.has(item.id)}
                       onChange={() => handleCheckboxChange(item.id)}
-                      // style={{ marginRight: "10px" }}
                     />
                     <img
                       onClick={() => handleshowdescription(item.id)}
@@ -264,7 +260,7 @@ const Cart = () => {
         handleClose={() => setShowModal(false)}
         selectedItems={selectedItems} 
         cartItems={cartItems}
-        totalPrice={calculateSelectedTotalPrice()} // Total price of selected items
+        totalPrice={calculateSelectedTotalPrice()} 
         handleCheckout={handleCheckout}
       />
     </div>

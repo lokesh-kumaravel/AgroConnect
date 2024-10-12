@@ -59,10 +59,9 @@ const UpdateProduct = () => {
     const updatedProduct = new FormData();
     updatedProduct.append("imageFile", image);
   
-    // Ensure stockQuantity is a number
     const productData = {
       ...updateProduct,
-      stockQuantity: Number(updateProduct.stockQuantity), // Convert to number
+      stockQuantity: Number(updateProduct.stockQuantity),
     };
   
     updatedProduct.append(

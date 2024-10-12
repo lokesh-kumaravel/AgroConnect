@@ -190,7 +190,7 @@ const Product = () => {
             {product.productAvailable && (
               <div className="mt-3">
                 <hr />
-                <GooglePayButton
+                {/* <GooglePayButton
                   environment="TEST"
                   paymentRequest={{
                     apiVersion: 2,
@@ -239,7 +239,7 @@ const Product = () => {
                   existingPaymentMethodRequired='false'
                   buttonColor='black'
                   buttonType='Buy'
-                />
+                /> */}
               </div>
             )}
           </div>

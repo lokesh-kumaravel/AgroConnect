@@ -67,7 +67,7 @@ const AddProduct = () => {
       })
       .then((response) => {
         alert("Product added successfully");
-        navigate("/"); // Redirect after success
+        navigate("/"); 
       })
       .catch((error) => {
         alert("Error adding product");
@@ -179,7 +179,7 @@ const AddProduct = () => {
       name="releaseDate"
       onChange={handleInputChange}
       id="releaseDate"
-      placeholder="YYYY-MM-DD" // Placeholder format
+      placeholder="YYYY-MM-DD" 
       required
     />
     <span className="input-group-text" title="Select a date"><i className="bi bi-calendar"></i></span>

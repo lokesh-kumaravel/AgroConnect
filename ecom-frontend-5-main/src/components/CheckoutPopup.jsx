@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 const CheckoutPopup = ({ show, handleClose, selectedItems, cartItems, totalPrice, handleCheckout }) => {
-  // Filter to get only selected items
   const selectedCartItems = cartItems.filter(item => selectedItems.has(item.id));
 
   return (
