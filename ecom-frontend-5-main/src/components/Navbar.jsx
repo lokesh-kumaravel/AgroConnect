@@ -267,7 +267,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
 
       {/* Move search bar here to make it always visible */}
       <div className="d-flex align-items-center">
-        <input
+        {/* <input
           className="form-control me-2"
           type="search"
           placeholder="Search"
@@ -276,7 +276,7 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => setSearchFocused(true)}
           onBlur={() => setSearchFocused(false)}
-        />
+        /> */}
         {showSearchResults && (
           <ul className="list-group">
             {searchResults.length > 0 ? (

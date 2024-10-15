@@ -55,15 +55,18 @@ const Home = ({ selectedCategory }) => {
     const fetchWishlist = async () => {
       try {
         const userId = localStorage.getItem("currentuser"); 
-        const response = await axios.get(`/api/wishlist/${userId}`);
-        const wishlist = response.data; 
-
-        const initialLikedProducts = {};
-        wishlist.forEach(id => {
-          initialLikedProducts[id] = true;
-        });
-
-        setLikedProducts(initialLikedProducts);
+        if(userId!=null)
+        {
+          const response = await axios.get(`/api/wishlist/${userId}`);
+          const wishlist = response.data; 
+          
+          const initialLikedProducts = {};
+          wishlist.forEach(id => {
+            initialLikedProducts[id] = true;
+          });
+          
+          setLikedProducts(initialLikedProducts);
+        }
       } catch (error) {
         console.error('Error fetching wishlist:', error);
       }

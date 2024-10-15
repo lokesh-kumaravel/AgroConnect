@@ -19,7 +19,7 @@ import java.util.Date;
 public class Product {
 
     @Id
-    private String id; // Use String for MongoDB
+    private String id; 
     private String userId;
     private String name;
     private String description;

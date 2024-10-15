@@ -2,7 +2,9 @@ package com.lokesh.ecom_proj.service;
 
 
 import com.lokesh.ecom_proj.model.Review;
+import com.lokesh.ecom_proj.model.User;
 import com.lokesh.ecom_proj.repo.ReviewRepository;
+import com.lokesh.ecom_proj.repo.UserRepo;
 import com.lokesh.ecom_proj.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,5 +42,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(String productId, String reviewId) {
         reviewRepository.deleteById(reviewId);
+    }
+
+    @Autowired
+    private UserRepo userrapo;
+
+    public String getUserNameById(String userId) {
+        return userrapo.findById(userId)
+            .map(User::getUsername) // Assuming User has a getName() method
+            .orElse("Unknown User"); // Default if user not found
     }
 }

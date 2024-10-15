@@ -158,7 +158,8 @@ public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userI
 @GetMapping("/quantity/{productid}/cart")
 // @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
 public int getQuantity(@PathVariable String productid) {
-    System.out.println(productid);
+    System.out.println("Hello sirreh");
+    System.out.println("Hi ednejn : "+productid);
     Product product = productRepository.findById(productid)
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 

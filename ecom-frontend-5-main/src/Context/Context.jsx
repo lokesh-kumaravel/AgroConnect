@@ -1,7 +1,7 @@
-import axios from "../axios";
+import axioss from "../axios";
 import { useState, useEffect, createContext } from "react"; 
 // import { useNavigate } from 'react-router-dom'; 
-
+import axios from "axios";
 const AppContext = createContext({
   // username: "",
   // setUsername: (name) => {},
@@ -104,7 +104,7 @@ export const AppProvider = ({ children }) => {
       return;
     }
     try {
-      const response = await axios.delete(`/users/${userId}/cart/${productId}`);
+      const response = await axioss.delete(`/users/${userId}/cart/${productId}`);
       setCart(response.data.cart);
     } catch (error) {
       console.error("Error removing from cart", error);
@@ -113,7 +113,7 @@ export const AppProvider = ({ children }) => {
 
   const refreshData = async () => {
     try {
-      const response = await axios.get("/products");
+      const response = await axioss.get("/products");
       setData(response.data);
       setUsername(response.data);
     } catch (error) {

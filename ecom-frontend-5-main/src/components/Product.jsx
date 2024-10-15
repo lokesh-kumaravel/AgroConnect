@@ -9,6 +9,9 @@ import axios from "../axiosProduct";
 import GooglePayButton from "@google-pay/button-react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReviewComponent from "./ReviewComponent";
+import "./Product.css";
+import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, WhatsappIcon, } from 'react-share';
+import InstagramIcon from "../assets/unplugged.png";
 
 const Product = () => {
   const { id } = useParams();
@@ -87,26 +90,47 @@ const Product = () => {
       return alert("User not logged in");
     }
 
+    // try {
+    //   const productResponse = await axios.get(`/users/quantity/${productId}/cart`);
+    //   const availableQuantity = productResponse.data;
+
+    //   const userCartResponse = await axios.get(`/users/currentquantity/${userId}/${productId}/cart`, {
+    //     headers: { Authorization: `Bearer ${token}` }
+    //   });
+    //   const cartQuantity = userCartResponse.data;
+
+    //   if (cartQuantity >= availableQuantity) {
+    //     return alert("Out of stock");
+    //   }
+
+    //   const success = await addToCart(product);
+    //   if (success) {
+    //     alert("Product added to cart");
+    //   } else {
+    //     alert("Failed to add product to cart. Please try again.");
+    //   }
+    // }
     try {
-      const productResponse = await axios.get(`/users/quantity/${productId}/cart`);
-      const availableQuantity = productResponse.data;
-
-      const userCartResponse = await axios.get(`/users/currentquantity/${userId}/${productId}/cart`, {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+        },
       });
-      const cartQuantity = userCartResponse.data;
 
-      if (cartQuantity >= availableQuantity) {
-        return alert("Out of stock");
+      if (!response.ok) {
+        console.error("Invalid token, redirecting to login.");
+        navigate('/login');
+        return;
       }
-
-      const success = await addToCart(product);
-      if (success) {
-        alert("Product added to cart");
+      const res = await addToCart(product);
+      if (res) {
+        alert("Product added to cart!");
       } else {
-        alert("Failed to add product to cart. Please try again.");
+        alert("Out of Stock!");
       }
-    } catch (error) {
+    } 
+    catch (error) {
       const errorMessage = error.response?.data?.message || "Failed to add product to cart. Please try again.";
       alert(errorMessage);
       console.error("Error adding to cart", error);
@@ -120,138 +144,253 @@ const Product = () => {
   if (!product) {
     return <h2 className="text-center my-5">Product not found.</h2>;
   }
-
+  const instagramShareUrl = `https://www.instagram.com/?url=${encodeURIComponent(window.location.href)}`;
   const curid = localStorage.getItem("currentuser");
-
+  const shareUrl = window.location.href; // Get the current page URL
+  const title = product.name; // The title for sharing
   return (
-    <div className="container my-5">
-      <div className="row">
-        {/* <div style={{paddingTop:'0px'}}></div> */}
-        <div style={{paddingTop:'0px'}}></div>
-        <div className="col-md-6 d-flex justify-content-center align-items-center">
-  <img 
-    className="img-fluid" 
-    src={imageUrl} 
-    alt={product.imageName} 
-    style={{ width: '80%', height: '300px', objectFit: 'cover' }} 
-  />
-</div>
-        <div className="col-md-6">
-          <div className="product-description">
-            <div className="d-flex justify-content-between">
-              <span className="text-muted">{product.category}</span>
-              <div 
-              tyle={{
-                width: '60%',
-                height: '100vh', // Adjust the height as needed
-                display: 'flex',
-                alignItems: 'center', // Vertically center
-                justifyContent: 'center', // Horizontally center
-                margin: '0 auto', // Center the div itself
-            }}
-              >
-            <h1 className="h3 text-capitalize" style={{color:"red"}}>{product.name}</h1>
-            </div>
-              <p className="release-date">
-                <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
-              </p>
-            </div>
-            <i className="text-muted">{product.brand}</i>
-            <p className="font-weight-bold mt-2" style={{fontFamily:"Times New Roman"}}>PRODUCT DESCRIPTION:</p>
-            <div style={{width:'auto', height:'auto'}}>
-            <p>{product.description}</p>
-            </div>
-          </div>
-          <div className="product-price mt-3" >
-            <span className="h4">₹{product.price}</span>
-            <h6 className="mt-2">
-              Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
-            </h6>
-            {product.userId !== curid && (
-              <button
-                className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
-                onClick={() => handleAddToCart(product.id, product)}
-                disabled={!product.productAvailable}
-              >
-                {product.productAvailable ? "Add to cart" : "Out of Stock"}
-              </button>
-            )}
-          
-            {product.userId === curid && (
-              <div className="mt-1" style={{display:"flex"}}>
-               <button className="btn btn-warning me-2" style={{backgroundColor:'orange'}} onClick={handleEditClick}>Update</button>
-               <button className="btn btn-danger" style={{backgroundColor:'red'}} onClick={deleteProduct}>Delete</button>
-             </div>
-           )}
-           {/* this is the review content */}
-           {/* {product.userId !== curid &&(
-           <ReviewComponent productId={product.id} />)} */}
-
-            {product.productAvailable && (
-              <div className="mt-3">
-                <hr />
-                {/* <GooglePayButton
-                  environment="TEST"
-                  paymentRequest={{
-                    apiVersion: 2,
-                    apiVersionMinor: 0,
-                    allowedPaymentMethods: [
-                      {
-                        type: 'CARD',
-                        parameters: {
-                          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                          allowedCardNetworks: ['MASTERCARD', 'VISA'],
-                        },
-                        tokenizationSpecification: {
-                          type: 'PAYMENT_GATEWAY',
-                          parameters: {
-                            gateway: 'example',
-                            gatewayMerchantId: 'exampleGatewayMerchantId',
-                          },
-                        },
-                      },
-                    ],
-                    merchantInfo: {
-                      merchantId: '12345678901234567890',
-                      merchantName: 'Demo Merchant',
-                    },
-                    transactionInfo: {
-                      totalPriceStatus: 'FINAL',
-                      totalPriceLabel: 'Total',
-                      totalPrice: product.price.toString(),
-                      currencyCode: 'USD',
-                      countryCode: 'US',
-                    },
-                    shippingAddressRequired: true,
-                    callbackIntents: ['SHIPPING_ADDRESS', 'PAYMENT_AUTHORIZATION'],
-                  }}
-                  onLoadPaymentData={paymentRequest => {
-                    console.log('Success', paymentRequest);
-                  }}
-                  onPaymentAuthorized={paymentData => {
-                    console.log('Payment Authorised Success', paymentData);
-                    return { transactionState: 'SUCCESS' };
-                  }}
-                  onPaymentDataChanged={paymentData => {
-                    console.log('On Payment Data Changed', paymentData);
-                    return {};
-                  }}
-                  existingPaymentMethodRequired='false'
-                  buttonColor='black'
-                  buttonType='Buy'
-                /> */}
-              </div>
-            )}
-          </div>
-          {/* {product.userId === curid && (
-            <div className="mt-1">
-              <button className="btn btn-warning me-2" onClick={handleEditClick}>Update</button>
-              <button className="btn btn-danger" onClick={deleteProduct}>Delete</button>
-            </div>
-          )} */}
-        </div>
-      </div>
+    <div className="row align-items-start">
+  <div className="col-md-4 d-flex justify-content-center" style={{ minHeight: '300px' }}>
+    <img 
+      className="img-fluid" 
+      src={imageUrl} 
+      alt={product.imageName} 
+      style={{ objectFit: 'cover', width: '100%' }} 
+    />
+  </div>
+  <div className="col-md-5">
+    {/* Product Details Section */}
+    <div className="product-description">
+      <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
+      <span className="text-muted">{product.category}</span>
+      <p className="release-date">
+        <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
+      </p>
+      <i className="text-muted">{product.brand}</i>
+      <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
+      <p>{product.description}</p>
     </div>
+    <div className="product-price mt-3">
+      <span className="h4">₹{product.price}</span>
+      <div className="share-buttons">
+        <FacebookShareButton url={shareUrl} quote={title} >
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+        <TwitterShareButton url={shareUrl} title={title}>
+          <TwitterIcon size={32} round />
+        </TwitterShareButton>
+        <WhatsappShareButton url={shareUrl} title={title}>
+          <WhatsappIcon size={32} round />
+        </WhatsappShareButton>
+        <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
+            <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
+            </a>
+      </div>
+      <h6 className="mt-2">
+        Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+      </h6>
+      {product.userId !== curid && (
+          <button
+            className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
+            onClick={() => handleAddToCart(product.id, product)}
+            disabled={!product.productAvailable}
+          >
+            {product.productAvailable ? "Add to cart" : "Out of Stock"}
+          </button>
+        )}
+        {product.userId === curid && (
+          <div className="mt-1 d-flex">
+            <button className="btn btn-warning me-2" style={{ backgroundColor: 'orange' }} onClick={handleEditClick}>Update</button>
+            <button className="btn btn-danger" style={{ backgroundColor: 'red' }} onClick={deleteProduct}>Delete</button>
+          </div>
+        )}
+      {/* Add to cart button here */}
+    </div>
+  </div>
+  <div className="col-md-3">
+    {/* Review Component */}
+    <ReviewComponent productId={product.id} productOwnerId={product.userId}/>
+  </div>
+</div>
+
+//     <div className="container my-5">
+//   <div className="row align-items-start">
+//     <div className="col-md-4 d-flex justify-content-center">
+//       <img 
+//         className="img-fluid" 
+//         src={imageUrl} 
+//         alt={product.imageName} 
+//         style={{marginTop:'130%', height: '100%', objectFit: 'cover', width: '80%'}} 
+//       />
+//     </div>
+//     <div className="col-md-5">
+//       <div className="product-description">
+//         <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
+//         <span className="text-muted">{product.category}</span>
+//         <p className="release-date">
+//           <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
+//         </p>
+//         <i className="text-muted">{product.brand}</i>
+//         <p className="font-weight-bold mt-2" style={{ fontFamily: "Times New Roman" }}>PRODUCT DESCRIPTION:</p>
+//         <p>{product.description}</p>
+//       </div>
+//       <div className="product-price mt-3">
+//         <span className="h4">₹{product.price}</span>
+//         <h6 className="mt-2">
+//           Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+//         </h6>
+//         {product.userId !== curid && (
+//           <button
+//             className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
+//             onClick={() => handleAddToCart(product.id, product)}
+//             disabled={!product.productAvailable}
+//           >
+//             {product.productAvailable ? "Add to cart" : "Out of Stock"}
+//           </button>
+//         )}
+//         {product.userId === curid && (
+//           <div className="mt-1 d-flex">
+//             <button className="btn btn-warning me-2" style={{ backgroundColor: 'orange' }} onClick={handleEditClick}>Update</button>
+//             <button className="btn btn-danger" style={{ backgroundColor: 'red' }} onClick={deleteProduct}>Delete</button>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//     <div className="col-md-3">
+//       {product.userId !== curid && <ReviewComponent productId={product.id} />}
+//     </div>
+//   </div>
+// </div>
+
+    // <div className="container my-5">
+    //   <div style={{paddingTop:'auto'}}></div>
+    //   <div className="row">
+    //     {/* <div style={{paddingTop:'0px'}}></div> */}
+    //     <div style={{paddingTop:'0px'}}></div>
+    //     <div className="col-md-6 d-flex justify-content-center align-items-center">
+    //       <img 
+    //         className="img-fluid" 
+    //         src={imageUrl} 
+    //         alt={product.imageName} 
+    //         style={{ width: '80%', height: '300px', objectFit: 'cover' }} 
+    //       />
+    //     </div>
+    //     <div className="col-md-6">
+    //       <div className="product-description">
+    //         <div className="d-flex justify-content-between">
+    //           <span className="text-muted">{product.category}</span>
+    //           <div 
+    //           tyle={{
+    //             width: '60%',
+    //             height: '100vh', // Adjust the height as needed
+    //             display: 'flex',
+    //             alignItems: 'center', // Vertically center
+    //             justifyContent: 'center', // Horizontally center
+    //             margin: '0 auto', // Center the div itself
+    //         }}
+    //           >
+    //         <h1 className="h3 text-capitalize" style={{color:"red"}}>{product.name}</h1>
+    //         </div>
+    //           <p className="release-date">
+    //             <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
+    //           </p>
+    //         </div>
+    //         <i className="text-muted">{product.brand}</i>
+    //         <p className="font-weight-bold mt-2" style={{fontFamily:"Times New Roman"}}>PRODUCT DESCRIPTION:</p>
+    //         <div style={{width:'auto', height:'auto'}}>
+    //         <p>{product.description}</p>
+    //         </div>
+    //       </div>
+    //       <div className="product-price mt-3" >
+    //         <span className="h4">₹{product.price}</span>
+    //         <h6 className="mt-2">
+    //           Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+    //         </h6>
+    //         {product.userId !== curid && (
+    //           <button
+    //             className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
+    //             onClick={() => handleAddToCart(product.id, product)}
+    //             disabled={!product.productAvailable}
+    //           >
+    //             {product.productAvailable ? "Add to cart" : "Out of Stock"}
+    //           </button>
+    //         )}
+          
+    //         {product.userId === curid && (
+    //           <div className="mt-1" style={{display:"flex"}}>
+    //            <button className="btn btn-warning me-2" style={{backgroundColor:'orange'}} onClick={handleEditClick}>Update</button>
+    //            <button className="btn btn-danger" style={{backgroundColor:'red'}} onClick={deleteProduct}>Delete</button>
+    //          </div>
+    //        )}
+    //        {/* this is the review content */}
+    //        {product.userId !== curid &&(
+    //        <ReviewComponent productId={product.id} />)}
+
+    //         {product.productAvailable && (
+    //           <div className="mt-3">
+    //             <hr />
+    //             {/* <GooglePayButton
+    //               environment="TEST"
+    //               paymentRequest={{
+    //                 apiVersion: 2,
+    //                 apiVersionMinor: 0,
+    //                 allowedPaymentMethods: [
+    //                   {
+    //                     type: 'CARD',
+    //                     parameters: {
+    //                       allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+    //                       allowedCardNetworks: ['MASTERCARD', 'VISA'],
+    //                     },
+    //                     tokenizationSpecification: {
+    //                       type: 'PAYMENT_GATEWAY',
+    //                       parameters: {
+    //                         gateway: 'example',
+    //                         gatewayMerchantId: 'exampleGatewayMerchantId',
+    //                       },
+    //                     },
+    //                   },
+    //                 ],
+    //                 merchantInfo: {
+    //                   merchantId: '12345678901234567890',
+    //                   merchantName: 'Demo Merchant',
+    //                 },
+    //                 transactionInfo: {
+    //                   totalPriceStatus: 'FINAL',
+    //                   totalPriceLabel: 'Total',
+    //                   totalPrice: product.price.toString(),
+    //                   currencyCode: 'USD',
+    //                   countryCode: 'US',
+    //                 },
+    //                 shippingAddressRequired: true,
+    //                 callbackIntents: ['SHIPPING_ADDRESS', 'PAYMENT_AUTHORIZATION'],
+    //               }}
+    //               onLoadPaymentData={paymentRequest => {
+    //                 console.log('Success', paymentRequest);
+    //               }}
+    //               onPaymentAuthorized={paymentData => {
+    //                 console.log('Payment Authorised Success', paymentData);
+    //                 return { transactionState: 'SUCCESS' };
+    //               }}
+    //               onPaymentDataChanged={paymentData => {
+    //                 console.log('On Payment Data Changed', paymentData);
+    //                 return {};
+    //               }}
+    //               existingPaymentMethodRequired='false'
+    //               buttonColor='black'
+    //               buttonType='Buy'
+    //             /> */}
+    //           </div>
+    //         )}
+    //       </div>
+    //       {/* {product.userId === curid && (
+    //         <div className="mt-1">
+    //           <button className="btn btn-warning me-2" onClick={handleEditClick}>Update</button>
+    //           <button className="btn btn-danger" onClick={deleteProduct}>Delete</button>
+    //         </div>
+    //       )} */}
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

@@ -19,31 +19,30 @@ public class Review {
 
     @Id
     private String reviewId; 
+    private String userName;
+    private String productId; 
 
-    private String productId; // Reference to the associated product
-
-    private String userId; // Reference to the user who wrote the review
+    private String userId;
 
     @Min(1)
     @Max(5)
-    private int rating; // Rating from 1 to 5
+    private int rating; 
 
     @NotEmpty(message = "Review text cannot be empty")
-    private String reviewText; // The actual review text
+    private String reviewText;
 
-    private Date timestamp; // Date when the review was created
+    private Date timestamp;
 
     public Review(String productId, String userId, int rating, String reviewText) {
         this.productId = productId;
         this.userId = userId;
         this.rating = rating;
         this.reviewText = reviewText;
-        this.timestamp = new Date(); // Set the timestamp to the current date
+        this.timestamp = new Date();
     }
 
     public void setId(String reviewId2) {
         this.reviewId = reviewId2;
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setId'");
     }
 }
