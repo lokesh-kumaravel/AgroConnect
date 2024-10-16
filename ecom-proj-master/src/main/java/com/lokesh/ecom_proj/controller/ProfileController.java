@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +37,17 @@ public class ProfileController {
     @Autowired
     private JWTService jwtService;
 
+    @PutMapping("/update-username/{userId}")
+    public ResponseEntity<User> updateProfileName(
+            @PathVariable String userId, 
+            @RequestBody String username) {
+
+        System.out.println("User ID: " + userId + ", New Username: " + username);
+        User user = userRepo.getUserById(userId);
+        user.setUsername(username);
+        userRepo.save(user); 
+        return ResponseEntity.ok(user);
+    }
     @GetMapping
     public ResponseEntity<?> getProfile(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");

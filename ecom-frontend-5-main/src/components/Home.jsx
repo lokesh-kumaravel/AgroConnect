@@ -9,6 +9,8 @@ import unplugged from "../assets/unplugged.png";
 import Loader from "./Loader";
 import axios from "../axiosProduct";
 const Home = ({ selectedCategory }) => {
+  const [message, setMessage] = useState('');
+  const [messageVisible, setMessageVisible] = useState(false);
   const { data, isError, addToCart, refreshData } = useContext(AppContext);
   const [products, setProducts] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
@@ -26,6 +28,11 @@ const Home = ({ selectedCategory }) => {
   // };
 
   const toggleLike = async (productId) => {
+    const tokrn = localStorage.getItem("jwt"); 
+    if(tokrn==null)
+    {
+      navigate('/login')
+    }
     const currentLiked = likedProducts[productId];
     const newLikedState = !currentLiked;
 
@@ -76,42 +83,92 @@ const Home = ({ selectedCategory }) => {
   }, []);
 
 
-  const handleAddToCart = async (product) => {
-    const token = localStorage.getItem("jwt"); 
-    if (!token) {
-      console.log("No token found, redirecting to login.");
-      navigate("/login"); 
+  const handleAddToCart = async (e, product) => {
+    // e.preventDefault();
+  const token = localStorage.getItem("jwt"); 
+  if (!token) {
+    console.log("No token found, redirecting to login.");
+    navigate("/login"); 
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Invalid token, redirecting to login.");
+      navigate('/login');
       return;
     }
 
-    try {
-      setLoading(true);
-      const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + token,
-        },
-      });
+    setLoading(false);
+    const userDetails = await response.json();
+    console.log(userDetails);
 
-      if (!response.ok) {
-        console.error("Invalid token, redirecting to login.");
-        navigate('/login');
-        return;
-      }
-      setLoading(false);
-      const userDetails = await response.json();
-      console.log(userDetails);
-
-      const res = await addToCart(product);
-      if (res) {
-        alert("Product added to cart!");
-      } else {
-        alert("Out of Stock!");
-      }
-    } catch (error) {
-      console.error("Error during API call:", error);
+    const res = await addToCart(product);
+    if (res) {
+      setMessage("Product added to cart!");
+    } else {
+      setMessage("Out of Stock!"); // Change this line for the correct message
     }
-  };
+
+    setMessageVisible(true); // Set message visibility to true
+    setTimeout(() => {
+      setMessageVisible(false);
+    }, 2000);
+  } catch (error) {
+    console.error("Error during API call:", error);
+  }
+};
+
+  // const handleAddToCart = async (product) => {
+  //   const token = localStorage.getItem("jwt"); 
+  //   if (!token) {
+  //     console.log("No token found, redirecting to login.");
+  //     navigate("/login"); 
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': 'Bearer ' + token,
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       console.error("Invalid token, redirecting to login.");
+  //       navigate('/login');
+  //       return;
+  //     }
+  //     setLoading(false);
+  //     const userDetails = await response.json();
+  //     console.log(userDetails);
+
+  //     const res = await addToCart(product);
+  //     if (res) {
+  //       setMessage("Product added to cart!");
+  //       // alert("Product added to cart!");
+  //     } else {
+  //       setMessage("Product added to cart!");
+  //       // alert("Out of Stock!");
+  //     }
+  //     setMessage("Product added to cart!");
+  //     setTimeout(() => {
+  //       setMessageVisible(false);
+  //     }, 2000);
+  //   } catch (error) {
+  //     console.error("Error during API call:", error);
+  //   }
+  // };
 
   useEffect(() => {
     if (!isDataFetched) {
@@ -172,6 +229,22 @@ const Home = ({ selectedCategory }) => {
 
   return (
     <>
+      {messageVisible && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          color: 'white',
+          padding: '10px 20px',
+          borderRadius: '5px',
+          zIndex: 1000, // Ensure it appears above other content
+          transition: 'opacity 0.5s ease'
+        }}>
+          {message}
+        </div>
+      )}
       <div style={{ padding: '1px' }}></div>
       <div
         className="grid"
@@ -326,6 +399,7 @@ const Home = ({ selectedCategory }) => {
                   {/* <hr className="hr-line" style={{ margin: "10px 0" }} /> */}
                   <center>
                     <button
+                      type="button"
                       className="btn-hover color-9"
                       // style={{ margin: '10px 25px 0px ' }}
                       style={{
@@ -339,7 +413,8 @@ const Home = ({ selectedCategory }) => {
                       }}
                       onClick={(e) => {
                         e.preventDefault();
-                        handleAddToCart(product);
+                        e.stopPropagation(); // Prevents the event from bubbling up
+                        handleAddToCart(e, product);
                       }}
                       disabled={!productAvailable}
                     >

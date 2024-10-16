@@ -66,7 +66,15 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
   };
 
   const handleClick = () => {
-    navigate('/wishlist')
+    const token = localStorage.getItem('jwt');
+    if(token==null)
+    {
+      navigate('/login')
+    }
+    else{
+      console.log("Helrreee"+token);
+      navigate('/wishlist')
+    }
     // onChange();
   };
 
@@ -86,6 +94,10 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
     setToken(null); 
   };
 
+  const handleCategorySelect = (category) => {
+        setSelectedCategory(category);
+        onSelectCategory(category);
+      };
   const categories = [
     "Seed",
     "Equipment",

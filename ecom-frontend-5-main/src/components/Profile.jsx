@@ -27,6 +27,7 @@ const Profile = () => {
     const fetchProfilePhoto = async () => {
       try {
         const token = localStorage.getItem('jwt');
+        const userId = localStorage.getItem('currentuser');
         const response = await axios.get('/profile/profile-photo', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,12 +46,18 @@ const Profile = () => {
     fetchProfilePhoto();
   }, []);
 
+  const handleClick = () => {
+    navigate('/wishlist')
+    // onChange();
+  };
+
   const handleUpload = async (selectedFile) => {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
     try {
       const token = localStorage.getItem('jwt');
+      const userId = localStorage.getItem('currentuser');
       const response = await axios.post('/profile/upload-photo', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -107,16 +114,21 @@ const Profile = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem('jwt');
-      await axios.put('/profile/update-username', { username }, {
+      const userId = localStorage.getItem('currentuser');
+      const response = await axios.put(`/profile/update-username/${userId}`, username, {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'text/plain', // or 'application/json' if using a JSON structure
         },
       });
+      console.log(response.data.username)
+      localStorage.setItem('username',response.data.username)
       setIsEditing(false);
     } catch (error) {
       console.error('Error updating username:', error);
     }
   };
+  
 
 
   return (
@@ -183,6 +195,22 @@ const Profile = () => {
           <h2>{username}</h2>
         )}
         <b><p className="profile-email">{userData.mailId}</p></b>
+        <div
+      onClick={handleClick}
+      style={{
+        cursor:'pointer'
+        // width: '40px',
+        // height: '40px',
+        // // backgroundColor: 'green',
+        // clipPath: 'polygon(50% 0%, 100% 30%, 100% 100%, 0% 100%, 0% 30%)',
+        // cursor: 'pointer',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+      }}
+    >
+      <span style={{ color: 'white', fontSize: '18px' }}>Wishlist💚</span>
+    </div>
         <b><p className="profile-products">Products Posted: {products.length}</p></b>
       <button onClick={handleEditToggle}>
         {isEditing ? 'Save' : 'Edit Profile'}

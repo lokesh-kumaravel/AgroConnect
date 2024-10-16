@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 // import axios from "axios";
 import axios from "../axiosProduct";
 const UpdateProduct = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState({});
   const [image, setImage] = useState();
@@ -84,6 +85,7 @@ const UpdateProduct = () => {
       console.log("Product updated successfully:", response.data);
       console.log(productData);
       alert("Product updated successfully!");
+      navigate(`/product/${id}`)
     } catch (error) {
       console.error("Error updating product:", error);
       alert("Failed to update product. Please try again.");

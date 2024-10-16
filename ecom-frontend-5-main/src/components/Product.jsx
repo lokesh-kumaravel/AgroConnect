@@ -1,7 +1,4 @@
-
 // // http://192.168.77.227:8080/jwtcheck
-
-
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../Context/Context";
@@ -173,19 +170,20 @@ const Product = () => {
     <div className="product-price mt-3">
       <span className="h4">₹{product.price}</span>
       <div className="share-buttons">
-        <FacebookShareButton url={shareUrl} quote={title} >
-          <FacebookIcon size={32} round />
-        </FacebookShareButton>
-        <TwitterShareButton url={shareUrl} title={title}>
-          <TwitterIcon size={32} round />
-        </TwitterShareButton>
-        <WhatsappShareButton url={shareUrl} title={title}>
-          <WhatsappIcon size={32} round />
-        </WhatsappShareButton>
-        <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
-            <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
-            </a>
-      </div>
+  <FacebookShareButton url={shareUrl} quote={title}>
+    <FacebookIcon size={32} round />
+  </FacebookShareButton>
+  <TwitterShareButton url={shareUrl} title={title}>
+    <TwitterIcon size={32} round />
+  </TwitterShareButton>
+  <WhatsappShareButton url={shareUrl} title={title}>
+    <WhatsappIcon size={32} round />
+  </WhatsappShareButton>
+  <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
+    <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
+  </a>
+</div>
+
       <h6 className="mt-2">
         Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
       </h6>
