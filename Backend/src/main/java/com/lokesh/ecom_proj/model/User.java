@@ -23,10 +23,9 @@ public class User {
     private List<CartItem> cart = new ArrayList<>();
 
 
-    // Fields for storing the profile image
-    private String imageName;     // The name of the image file
-    private String imageType;     // The type of the image (e.g., "image/jpeg", "image/png")
-    private byte[] imageData;     // The binary data of the image
+    private String imageName;     
+    private String imageType;     
+    private byte[] imageData;    
 
-    private List<String> wishlist = new ArrayList<>();  // List of liked product IDs
+    private List<String> wishlist = new ArrayList<>();  
 }

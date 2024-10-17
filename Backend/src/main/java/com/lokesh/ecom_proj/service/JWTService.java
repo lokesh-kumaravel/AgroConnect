@@ -22,8 +22,7 @@ public class JWTService {
     private final String secretKey;
 
     public JWTService() {
-        // Generate a secure random key
-        byte[] keyBytes = new byte[32]; // 256 bits
+        byte[] keyBytes = new byte[32]; 
         new SecureRandom().nextBytes(keyBytes);
         this.secretKey = Base64.getEncoder().encodeToString(keyBytes);
     }
@@ -31,13 +30,13 @@ public class JWTService {
     @SuppressWarnings("deprecation")
     public String generateToken(String mailId) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", mailId); // Use "sub" for subject claim
+        claims.put("sub", mailId);
     
         return Jwts.builder()
-                .setClaims(claims) // Set claims
-                .setIssuedAt(new Date(System.currentTimeMillis())) // Set issued date
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // Set expiration (1 hour)
-                .signWith(getKey(), SignatureAlgorithm.HS256) // Pass algorithm and key
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .signWith(getKey(), SignatureAlgorithm.HS256) 
                 .compact();
     }
     
@@ -49,7 +48,6 @@ public class JWTService {
     }
 
     public String extractUserName(String token) {
-        // Extract the username from JWT token
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -61,7 +59,7 @@ public class JWTService {
     @SuppressWarnings("deprecation")
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(getKey()) // Set the key for signature verification
+                .setSigningKey(getKey()) 
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

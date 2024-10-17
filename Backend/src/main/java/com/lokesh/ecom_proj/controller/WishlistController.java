@@ -32,7 +32,7 @@ public class WishlistController {
             System.out.println(wishlist);
             return ResponseEntity.ok(wishlist);
         } catch (Exception e) {
-            return ResponseEntity.status(404).body(null); // Not found
+            return ResponseEntity.status(404).body(null); 
         }
     }
     
@@ -42,7 +42,7 @@ public ResponseEntity<List<Product>> getWishlistProducts(@PathVariable String us
         List<Product> products = userService.getWishlistProducts(userId);
         return ResponseEntity.ok(products);
     } catch (Exception e) {
-        return ResponseEntity.status(404).body(null); // Not found
+        return ResponseEntity.status(404).body(null); 
     }
 }
 

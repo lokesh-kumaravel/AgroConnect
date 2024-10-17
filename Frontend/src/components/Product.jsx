@@ -143,8 +143,8 @@ const Product = () => {
   }
   const instagramShareUrl = `https://www.instagram.com/?url=${encodeURIComponent(window.location.href)}`;
   const curid = localStorage.getItem("currentuser");
-  const shareUrl = window.location.href; // Get the current page URL
-  const title = product.name; // The title for sharing
+  const shareUrl = window.location.href; 
+  const title = product.name;
   return (
     <div className="row align-items-start">
   <div className="col-md-4 d-flex justify-content-center" style={{ minHeight: '300px' }}>
@@ -188,7 +188,7 @@ const Product = () => {
     <h6 className="mt-2">
       Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
     </h6>
-    <div className="text-center mt-3"> {/* Centering buttons */}
+    <div className="text-center mt-3"> 
       {product.userId !== curid && (
         <button
           className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}

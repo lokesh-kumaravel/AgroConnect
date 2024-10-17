@@ -123,7 +123,6 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
         />
         AgroConnect
       </a>
-      {/* Move search bar here to make it always visible */}
       <div className="d-flex align-items-center" style={{width:'30%', paddingLeft:'0px'}}>
         <input
         // style={{backgroundColor:'lightgray',text:'red'}}

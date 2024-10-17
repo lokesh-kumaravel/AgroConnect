@@ -120,10 +120,10 @@ const Home = ({ selectedCategory }) => {
     if (res) {
       setMessage("Product added to cart!");
     } else {
-      setMessage("Out of Stock!"); // Change this line for the correct message
+      setMessage("Out of Stock!"); 
     }
 
-    setMessageVisible(true); // Set message visibility to true
+    setMessageVisible(true);
     setTimeout(() => {
       setMessageVisible(false);
     }, 2000);

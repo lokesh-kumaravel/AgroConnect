@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import AppContext from "../Context/Context"; // Your context for user state
+import AppContext from "../Context/Context";
 import { Link, useNavigate } from 'react-router-dom'; 
-import axios from "../axiosProduct"; // Your axios instance
+import axios from "../axiosProduct"; 
 import './Login.css';
 
 function Login() {
@@ -35,7 +35,7 @@ function Login() {
                 localStorage.setItem("currentuser", userId);
                 localStorage.setItem('jwt', token); 
                 
-                navigate('/'); // Redirect to homepage
+                navigate('/');
             } else {
                 const errorMessage = data?.message || "Login failed"; 
                 setError(errorMessage); 

@@ -49,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     public String getUserNameById(String userId) {
         return userrapo.findById(userId)
-            .map(User::getUsername) // Assuming User has a getName() method
-            .orElse("Unknown User"); // Default if user not found
+            .map(User::getUsername) 
+            .orElse("Unknown User");
     }
 }

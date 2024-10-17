@@ -33,12 +33,10 @@ public void updateCart(@PathVariable String userId, @RequestBody CartItem cartIt
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-    // Initialize the cart if it's null
     if (user.getCart() == null) {
         user.setCart(new ArrayList<>());
     }
 
-    // Fetch the product from the database to check its available quantity
     Product product = productRepository.findById(cartItem.getProductId())
         .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
@@ -48,14 +46,12 @@ public void updateCart(@PathVariable String userId, @RequestBody CartItem cartIt
 
         if (existingCartItem.isPresent()) {
             int currentQuantity = existingCartItem.get().getQuantity();
-            // Check if we can increment the quantity
             if (currentQuantity < product.getStockQuantity()) {
                 existingCartItem.get().setQuantity(currentQuantity + 1);
             } else {
                 throw new IllegalArgumentException("Not enough stock available."); // Throw an exception or return a response indicating failure
             }
         } else {
-            // New cart item, set its initial quantity
             if (product.getStockQuantity() > 0) {
                 cartItem.setQuantity(1);
                 user.getCart().add(cartItem);
@@ -109,8 +105,8 @@ public void updateCart(@PathVariable String userId, @RequestBody CartItem cartIt
 public ResponseEntity<CartItem> updateCartItemQuantity(
         @PathVariable String userId,
         @PathVariable String productId,
-        @RequestBody Map<String, Integer> requestBody) { // Accept a Map for request body
-    int quantity = requestBody.get("quantity"); // Extract quantity from the Map
+        @RequestBody Map<String, Integer> requestBody) { 
+    int quantity = requestBody.get("quantity"); 
 
     System.out.println("to update the products quantity in the cart");
     User user = userRepository.findById(userId)
@@ -143,7 +139,6 @@ public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userI
     System.out.println("User accessing cart: " + user.getUsername());
     List<CartItem> cartItems = user.getCart();
 
-    // Create a response list to hold products with their quantities
     List<CartItemResponse> response = new ArrayList<>();
 
     for (CartItem cartItem : cartItems) {

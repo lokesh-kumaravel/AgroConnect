@@ -36,13 +36,12 @@ public class AuthService
                 System.out.println(token);
                 System.out.println(foundUser.getId());
                 
-                // Create an AuthResponse object to return token and user ID
-                return new AuthResponse(token, foundUser.getId()); // Assuming getId() returns the user ID
+                return new AuthResponse(token, foundUser.getId()); 
             } else {
-                throw new RuntimeException("Bad Credentials"); // Throw an exception for better error handling
+                throw new RuntimeException("Bad Credentials");
             }
         } else {
-            throw new RuntimeException("User Not Found"); // Throw an exception for better error handling
+            throw new RuntimeException("User Not Found");
         }
     }
 
@@ -61,7 +60,7 @@ public class AuthService
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         
         List<String> wishlist = user.getWishlist();
-        return productService.findProductsByIds(wishlist); // Fetch products by IDs
+        return productService.findProductsByIds(wishlist);
     }
 
 }

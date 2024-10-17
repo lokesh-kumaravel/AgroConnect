@@ -65,10 +65,8 @@ private UserRepo userrepo;
 public String getUsername(@PathVariable String userId) {  // Use @PathVariable instead of @RequestParam
     System.out.println("User ID: " + userId);
 
-    // Fetch user by ID
     User user = userrepo.getUserById(userId);
 
-    // Log and handle potential null user
     if (user != null) {
         String name = user.getUsername();
         System.out.println("Username: " + name);
@@ -110,13 +108,10 @@ public ResponseEntity<?> jwtCheck(HttpServletRequest request) {
         String username = jwtservice.extractUserName(token);
         System.out.println(username+";;;;;;;;;;;;");
         if (username != null) {
-            // Load user details from your UserDetailsService
             UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
             
-            // Validate token against user details
             if (jwtservice.validateToken(token, userDetails)) {
                 System.out.println("SUCCESSFULLY VALIDATED");
-                // return ResponseEntity.ok("JWT token is valid.");
                 return ResponseEntity.ok(Collections.singletonMap("message", "JWT token is valid.")); // Return a JSON object
             }
         }

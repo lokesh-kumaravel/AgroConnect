@@ -17,13 +17,13 @@ public class ProductService {
     private ProductRepo repo;
 
     public List<Product> findProductsByIds(List<String> productIds) {
-        return repo.findAllById(productIds); // Adjust this based on your repository method
+        return repo.findAllById(productIds);
     }
     public List<Product> getAllProducts() {
         return repo.findAll();
     }
 
-    public Product getProductById(String id) {  // Changed to String
+    public Product getProductById(String id) { 
         return repo.findById(id).orElse(null);
     }
 
@@ -40,7 +40,6 @@ public class ProductService {
     }
 
     public Product updateProduct(String id, Product product, MultipartFile imageFile) throws IOException {
-        // Retrieve existing product first
         Product existingProduct = getProductById(id);
         if (existingProduct != null) {
             if (imageFile != null) {
@@ -48,7 +47,6 @@ public class ProductService {
                 existingProduct.setImageName(imageFile.getOriginalFilename());
                 existingProduct.setImageType(imageFile.getContentType());
             }
-            // Update other fields of the existing product as needed
             existingProduct.setName(product.getName());
             existingProduct.setDescription(product.getDescription());
             existingProduct.setBrand(product.getBrand());
@@ -62,10 +60,10 @@ public class ProductService {
             }
             return repo.save(existingProduct);
         }
-        return null;  // Or throw an exception if not found
+        return null;  
     }
 
-    public void deleteProduct(String id) {  // Changed to String
+    public void deleteProduct(String id) { 
         repo.deleteById(id);
     }
 

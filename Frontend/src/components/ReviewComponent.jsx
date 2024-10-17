@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from "../axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './ReviewComponent.css'; // Adjust the path as necessary
+import './ReviewComponent.css'; 
 import AppContext from '../Context/Context';
 
 const ReviewComponent = ({ productId, productOwnerId }) => {
@@ -11,7 +11,7 @@ const ReviewComponent = ({ productId, productOwnerId }) => {
   const [reviewText, setReviewText] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showAll, setShowAll] = useState(false); // State to track whether to show all reviews
+  const [showAll, setShowAll] = useState(false); 
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -88,7 +88,7 @@ const ReviewComponent = ({ productId, productOwnerId }) => {
             <div>
               <div
                 style={{ cursor: 'pointer', fontSize: '24px', textAlign: 'center', margin: '10px 0', color: 'blue' }}
-                onClick={() => setShowAll(prev => !prev)} // Toggle between true and false
+                onClick={() => setShowAll(prev => !prev)}
               >
                 {/* nav-item dropdown */}
                 {showAll ? '▲' : '▼'} 

@@ -9,7 +9,6 @@ public class CartItemResponse {
         this.quantity = quantity;
     }
 
-    // Getters and Setters
     public Product getProduct() {
         return product;
     }

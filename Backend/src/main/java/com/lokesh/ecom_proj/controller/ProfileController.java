@@ -55,17 +55,11 @@ public class ProfileController {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
             String username = jwtService.extractUserName(token);
-
-            // Fetch the authenticated user
             User user = userRepo.findByUsername(username);
             if (user == null) {
                 return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
             }
-
-            // Fetch the user's products
             List<Product> products = productRepo.findByUserId(user.getId());
-
-            // Return user details and products as JSON response
             Map<String, Object> response = new HashMap<>();
             response.put("user", user);
             response.put("products", products);
@@ -79,24 +73,17 @@ public class ProfileController {
     @PostMapping("/upload-photo")
     public ResponseEntity<String> uploadProfilePhoto(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         try {
-            // Extract the token and retrieve the username
             String authorizationHeader = request.getHeader("Authorization");
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String token = authorizationHeader.substring(7);
                 String username = jwtService.extractUserName(token);
-
-                // Find the user by username
                 User user = userRepo.findByUsername(username);
                 if (user == null) {
                     return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
                 }
-
-                // Set the image details in the user object
                 user.setImageName(file.getOriginalFilename());
                 user.setImageType(file.getContentType());
                 user.setImageData(file.getBytes());
-
-                // Save the updated user with the profile image
                 userRepo.save(user);
 
                 return ResponseEntity.ok("Profile image uploaded successfully");
@@ -116,19 +103,12 @@ public ResponseEntity<Map<String, String>> getProfilePhoto(HttpServletRequest re
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
         String token = authorizationHeader.substring(7);
         String username = jwtService.extractUserName(token);
-
-        // Fetch the authenticated user
         User user = userRepo.findByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        // Check if the user has uploaded a profile image
         if (user.getImageData() != null) {
-            // Convert the image byte array to Base64 string
             String base64Image = java.util.Base64.getEncoder().encodeToString(user.getImageData());
-
-            // Create a response map with image type and image data (base64)
             Map<String, String> response = new HashMap<>();
             response.put("imageType", user.getImageType());
             response.put("imageData", base64Image);

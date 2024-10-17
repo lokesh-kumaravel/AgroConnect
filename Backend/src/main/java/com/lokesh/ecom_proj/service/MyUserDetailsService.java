@@ -20,12 +20,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username); // Use email as the identifier
+        User user = userRepo.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-
-        // If the user is authenticated via Google, return a UserDetails without a password check
-        return new UserPrincipal(user); // Implement UserPrincipal to handle Google users
+        return new UserPrincipal(user); 
     }
 }

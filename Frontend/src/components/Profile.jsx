@@ -118,7 +118,7 @@ const Profile = () => {
       const response = await axios.put(`/profile/update-username/${userId}`, username, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'text/plain', // or 'application/json' if using a JSON structure
+          'Content-Type': 'text/plain', 
         },
       });
       console.log(response.data.username)

@@ -9,7 +9,6 @@ public class AuthResponse {
         this.userId = userId;
     }
 
-    // Getters and setters
     public String getToken() {
         return token;
     }

@@ -30,7 +30,7 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable String userId) {
         List<Product> products = service.getProductsByUserId(userId);
         if (products == null || products.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.OK); // Return 404 if no products found
+            return new ResponseEntity<>(HttpStatus.OK); 
         }
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
