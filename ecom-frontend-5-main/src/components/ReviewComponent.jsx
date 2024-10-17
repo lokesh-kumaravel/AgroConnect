@@ -90,6 +90,7 @@ const ReviewComponent = ({ productId, productOwnerId }) => {
                 style={{ cursor: 'pointer', fontSize: '24px', textAlign: 'center', margin: '10px 0', color: 'blue' }}
                 onClick={() => setShowAll(prev => !prev)} // Toggle between true and false
               >
+                {/* nav-item dropdown */}
                 {showAll ? '▲' : '▼'} 
               </div>
             </div>

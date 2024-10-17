@@ -155,40 +155,113 @@ const Product = () => {
       style={{ objectFit: 'cover', width: '100%' }} 
     />
   </div>
+  {/* ///////////////////// */}
   <div className="col-md-5">
-    {/* Product Details Section */}
-    <div className="product-description">
-      <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
-      <span className="text-muted">{product.category}</span>
-      <p className="release-date">
-        <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
-      </p>
-      <i className="text-muted">{product.brand}</i>
-      <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
-      <p>{product.description}</p>
+  {/* Product Details Section */}
+  <div className="product-description">
+    <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
+    <span className="text-muted">{product.category}</span>
+    <p className="release-date">
+      <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
+    </p>
+    <i className="text-muted">{product.brand}</i>
+    <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
+    <p>{product.description}</p>
+  </div>
+  <div className="product-price mt-3">
+    <span className="h4">₹{product.price}</span>
+    <div className="share-buttons">
+      <FacebookShareButton url={shareUrl} quote={title}>
+        <FacebookIcon size={32} round />
+      </FacebookShareButton>
+      <TwitterShareButton url={shareUrl} title={title}>
+        <TwitterIcon size={32} round />
+      </TwitterShareButton>
+      <WhatsappShareButton url={shareUrl} title={title}>
+        <WhatsappIcon size={32} round />
+      </WhatsappShareButton>
+      <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
+        <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
+      </a>
     </div>
-    <div className="product-price mt-3">
-      <span className="h4">₹{product.price}</span>
-      <div className="share-buttons">
-  <FacebookShareButton url={shareUrl} quote={title}>
-    <FacebookIcon size={32} round />
-  </FacebookShareButton>
-  <TwitterShareButton url={shareUrl} title={title}>
-    <TwitterIcon size={32} round />
-  </TwitterShareButton>
-  <WhatsappShareButton url={shareUrl} title={title}>
-    <WhatsappIcon size={32} round />
-  </WhatsappShareButton>
-  <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
-    <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
-  </a>
+
+    <h6 className="mt-2">
+      Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+    </h6>
+    <div className="text-center mt-3"> {/* Centering buttons */}
+      {product.userId !== curid && (
+        <button
+          className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
+          onClick={() => handleAddToCart(product.id, product)}
+          disabled={!product.productAvailable}
+          style={{
+            width: '100%',
+            fontWeight: 'bold',
+            color: "white",
+            padding: '15px',
+            borderRadius: '20px',
+            border: 'none',
+            transition: 'all 0.2s ease-in-out'
+          }}
+        >
+          {product.productAvailable ? "Add to cart" : "Out of Stock"}
+        </button>
+      )}
+      {product.userId === curid && (
+        <div className="mt-2 d-flex justify-content-center">
+          <button className="btn btn-warning me-2" style={{ backgroundColor: 'orange' }} onClick={handleEditClick}>Update</button>
+          <button className="btn btn-danger" style={{ backgroundColor: 'red' }} onClick={deleteProduct}>Delete</button>
+        </div>
+      )}
+    </div>
+  </div>
 </div>
 
-      <h6 className="mt-2">
-        Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
-      </h6>
-      {product.userId !== curid && (
-          <button
+  {/* <div className="col-md-5">
+          <div className="product-description">
+            <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
+            <span className="text-muted">{product.category}</span>
+            <p className="release-date">
+              <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
+            </p>
+            <i className="text-muted">{product.brand}</i>
+            <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
+            <p>{product.description}</p>
+          </div>
+          <div className="product-price mt-3">
+            <span className="h4">₹{product.price}</span>
+            <div className="share-buttons">
+        <FacebookShareButton url={shareUrl} quote={title}>
+          <FacebookIcon size={32} round />
+        </FacebookShareButton>
+        <TwitterShareButton url={shareUrl} title={title}>
+          <TwitterIcon size={32} round />
+        </TwitterShareButton>
+        <WhatsappShareButton url={shareUrl} title={title}>
+          <WhatsappIcon size={32} round />
+        </WhatsappShareButton>
+        <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
+          <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
+        </a>
+      </div>
+
+            <h6 className="mt-2">
+              Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
+            </h6>
+            {product.userId !== curid && (
+                <button
+                style={{
+            display:'flex',
+            width:'block',
+            fontWeight:'bold',
+            color:"white",
+            padding:'15px',
+            margin:'20px auto',
+            borderRadius:'20ox',
+            border:'none',
+            transition: 'all 0.2s ease-in-out'
+          }}
+            // className={`buttonn ${!product.productAvailable ? "disabled" : ""}`}
             className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
             onClick={() => handleAddToCart(product.id, product)}
             disabled={!product.productAvailable}
@@ -202,14 +275,13 @@ const Product = () => {
             <button className="btn btn-danger" style={{ backgroundColor: 'red' }} onClick={deleteProduct}>Delete</button>
           </div>
         )}
-      {/* Add to cart button here */}
-    </div>
   </div>
-  <div className="col-md-3">
+      </div> */}
+      <div className="col-md-3">
     {/* Review Component */}
     <ReviewComponent productId={product.id} productOwnerId={product.userId}/>
-  </div>
-</div>
+      </div>
+   </div>
 
 //     <div className="container my-5">
 //   <div className="row align-items-start">

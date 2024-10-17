@@ -143,7 +143,17 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
               searchResults.map((result) => (
                 <li key={result.id} className="list-group-item">
                   <a href={`/product/${result.id}`} className="search-result-link">
+                  <button
+  style={{
+    left: '0%',
+    border: 'none',
+    width: '100%',
+    textAlign: 'left', 
+    padding: '7px'
+  }}
+>
                     <span>{result.name}</span>
+                  </button>
                   </a>
                 </li>
               ))
@@ -295,7 +305,17 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
               searchResults.map((result) => (
                 <li key={result.id} className="list-group-item">
                   <a href={`/product/${result.id}`} className="search-result-link">
+                  <button
+                  style={{
+                    left: '0%',
+                    border: 'none',
+                    width: '100%',
+                    textAlign: 'left', // Align text to the left
+                    padding: '7px', // Add padding for better appearance
+                  }}
+                >
                     <span>{result.name}</span>
+                </button>
                   </a>
                 </li>
               ))

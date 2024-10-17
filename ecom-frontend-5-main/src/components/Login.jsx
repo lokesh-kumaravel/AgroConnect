@@ -47,6 +47,9 @@ function Login() {
     };
 
     return (
+        <>
+        <br></br>
+        <br></br>
         <div className="container" style={{display: 'flex', paddingTop: '0%'}}>
             <div className="heading">Sign In</div>
             <br />
@@ -99,6 +102,7 @@ function Login() {
             
             <p>Don't have an account? <Link to="/register">Register here</Link></p>
         </div>
+        </>
     );
 }
 

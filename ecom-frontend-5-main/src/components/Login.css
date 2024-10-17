@@ -3,10 +3,11 @@
     max-width: 350px; /* Mobile width */
     background: #F8F9FD;
     border-radius: 40px;
-    padding: 25px 20px; /* Padding for mobile */
+    height: 600px;
+    padding: 25px 20px;
     border: 5px solid rgb(255, 255, 255);
     box-shadow: rgba(133, 189, 215, 0.8784313725) 0px 30px 30px -20px;
-    margin: 20px auto; 
+    /* margin: 20px auto;  */
 }
 
 /* Heading */
@@ -64,7 +65,7 @@
 /* Login Button */
 .form .login-button {
     display: block;
-    width: 100%;
+    width: 50%;
     font-weight: bold;
     background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
     color: white;
@@ -106,7 +107,7 @@
     margin-top: 5px;
 }
 
-.social-account-container .social-accounts .social-button {
+/* .social-account-container .social-accounts .social-button {
     background: linear-gradient(45deg, rgb(0, 0, 0) 0%, rgb(112, 112, 112) 100%);
     border: 5px solid white;
     padding: 5px;
@@ -130,7 +131,7 @@
 
 .social-account-container .social-accounts .social-button:active {
     transform: scale(0.9);
-}
+} */
 
 /* Agreement */
 .agreement {
