@@ -41,6 +41,7 @@ To set up the project locally, follow these steps:
    ```bash
    git clone https://github.com/lokesh-kumaravel/AgroConnect.git
 
+
 <!-- # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
