@@ -89,5 +89,5 @@ For any inquiries or feedback, feel free to reach out:
 - **Name**: Lokesh K
 - **Email**: [lokeshkumaravel29@gmail.com](mailto:lokeshkumaravel29@gmail.com)
 - **GitHub**: [lokesh-kumaravel](https://github.com/lokesh-kumaravel)
-- **LinkedIn**: [Lokesh K](https://www.linkedin.com/in/lokesh-kumaravel)
+- **LinkedIn**: [Lokesh K](https://www.linkedin.com/in/lokesh-k-5b7513276)
 
