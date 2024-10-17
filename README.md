@@ -62,6 +62,7 @@ To set up the project locally, follow these steps:
    mvn spring-boot:run
 
 ### 🗂️ Project Structure
+      ```bash
    /AgroConnect
    │
    ├── /frontend              # Frontend source files
@@ -74,7 +75,7 @@ To set up the project locally, follow these steps:
        ├── /src               # Main source files
        ├── /controllers       # Controllers for handling requests
        ├── /models            # JPA models for database entities
-      ├── /repositories      # MongoDB repositories for data access
+       ├── /repositories      # MongoDB repositories for data access
        └── Application.java    # Spring Boot application entry point
 
 ### 📜 License
