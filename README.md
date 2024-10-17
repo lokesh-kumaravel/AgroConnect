@@ -62,6 +62,7 @@ To set up the project locally, follow these steps:
    mvn spring-boot:run
 
 ### 🗂️ Project Structure
+   ```bash
 
 /AgroConnect
 │
