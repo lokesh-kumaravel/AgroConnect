@@ -63,23 +63,23 @@ To set up the project locally, follow these steps:
 
 ### 🗂️ Project Structure
       ```bash
-   /AgroConnect
-   │
-   ├── /frontend              # Frontend source files
-   │   ├── /src               # Main source files
-   │   ├── /components        # React components
-   │   ├── /pages             # Pages of the application
-   │   └── index.js           # Entry point for the frontend
-   │
-   └── /backend               # Backend source files
-       ├── /src               # Main source files
-       ├── /controllers       # Controllers for handling requests
-       ├── /models            # JPA models for database entities
-       ├── /repositories      # MongoDB repositories for data access
-       └── Application.java    # Spring Boot application entry point
+      /AgroConnect
+      │
+      ├── /frontend              # Frontend source files
+      │   ├── /src               # Main source files
+      │   ├── /components        # React components
+      │   ├── /pages             # Pages of the application
+      │   └── index.js           # Entry point for the frontend
+      │
+      └── /backend               # Backend source files
+          ├── /src               # Main source files
+          ├── /controllers       # Controllers for handling requests
+          ├── /models            # JPA models for database entities
+          ├── /repositories      # MongoDB repositories for data access
+          └── Application.java    # Spring Boot application entry point
 
 ### 📜 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the [MIT License](./LICENSE). See the LICENSE file for details.
 
 ### 📞 Contact
 
