@@ -41,6 +41,55 @@ To set up the project locally, follow these steps:
    ```bash
    git clone https://github.com/lokesh-kumaravel/AgroConnect.git
 
+2. Navigate into the project directory:
+   ```bash
+   cd AgroConnect
+
+3. Navigate into the Frontend directory:
+   ```bash
+   npm install
+
+4. Navigate into the Backend directory:
+   ```bash
+   mvn install
+
+5. Run the frontend:
+   ```bash
+   npm run dev
+
+6. Run the backend:
+   ```bash
+   mvn spring-boot:run
+
+
+
+### InstallationProject Structure
+    /AgroConnect
+    │
+    ├── /frontend              # Frontend source files
+    │   ├── /src               # Main source files
+    │   ├── /components        # React components
+    │   ├── /pages             # Pages of the application
+    │   └── index.js           # Entry point for the frontend
+    │
+    └── /backend               # Backend source files
+        ├── /src               # Main source files
+        ├── /controllers       # Controllers for handling requests
+        ├── /models            # JPA models for database entities
+        ├── /repositories      # MonggoDB repositories for data access
+        └── Application.java    # Spring Boot application entry point
+
+### License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+### Contact
+For any inquiries or feedback, feel free to reach out:
+
+- **Name**: Lokesh K
+- **Email**: lokeshkumaravel29@gmail.com
+- **GitHub**: lokesh-kumaravel
+- **Linkedin**: Lokesh K
+
 
 <!-- # React + Vite
 
