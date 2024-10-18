@@ -1,5 +1,5 @@
 package com.lokesh.ecom_proj.controller;
-
+    
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,43 +63,6 @@ public void updateCart(@PathVariable String userId, @RequestBody CartItem cartIt
 
     userRepository.save(user);
 }
-
-//     @PutMapping("/{userId}/cart")
-// @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
-// public void updateCart(@PathVariable String userId, @RequestBody CartItem cartItem) {
-//     User user = userRepository.findById(userId)
-//         .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-    
-//     // Initialize the cart if it's null
-//     if (user.getCart() == null) {
-//         user.setCart(new ArrayList<>());
-//     }
-
-//     // Fetch the product from the database to check its available quantity
-//     Product product = productRepository.findById(cartItem.getProductId())
-//         .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-
-//     Optional<CartItem> existingCartItem = user.getCart().stream()
-//         .filter(item -> item.getProductId().equals(cartItem.getProductId()))
-//         .findFirst();
-
-//     if (existingCartItem.isPresent()) {
-//         int currentQuantity = existingCartItem.get().getQuantity();
-//         // Check if we can increment the quantity
-//         if (currentQuantity < product.getStockQuantity()) { // Assume `getAvailableQuantity` returns the stock
-//             existingCartItem.get().setQuantity(currentQuantity + 1);
-//         } else {
-//             System.out.println("Cannot increment. Not enough stock available.");
-//         }
-//     } else {
-//         // New cart item, set its initial quantity
-//         cartItem.setQuantity(1);
-//         user.getCart().add(cartItem);
-//     }
-
-//     userRepository.save(user);
-// }
 @PutMapping("/{userId}/cart/{productId}")
 @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
 public ResponseEntity<CartItem> updateCartItemQuantity(
