@@ -24,18 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserController {
-        
-    // @Autowired
-    // private UserRepo userRepo;
-    // @GetMapping("user/{userId}")
-    // public ResponseEntity<User> getUserById(@PathVariable String userId) {
-    //     User user = userRepo.getUserById(userId);
-    //     if (user != null) {
-    //         return ResponseEntity.ok(user);
-    //     } else {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-    //     }
-    // }
+
     @GetMapping("/")
     public String getMethodName() {
         System.out.println("Connecting from the phone: ****************");
@@ -62,7 +51,7 @@ public ResponseEntity<AuthResponse> login(@RequestBody User user) {
 private UserRepo userrepo;
 
 @GetMapping("/getusername/{userId}")
-public String getUsername(@PathVariable String userId) {  // Use @PathVariable instead of @RequestParam
+public String getUsername(@PathVariable String userId) {  
     System.out.println("User ID: " + userId);
 
     User user = userrepo.getUserById(userId);
@@ -76,25 +65,6 @@ public String getUsername(@PathVariable String userId) {  // Use @PathVariable i
         return "User not found";
     }
 }
-
-    // @PostMapping("/login")
-    // public ResponseEntity<AuthResponse> login(@RequestBody User user) {
-    //     try {
-    //         AuthResponse authResponse = authService.verify(user); // Call the verify method
-    //         return ResponseEntity.ok(authResponse); // Return the AuthResponse directly
-    //     } catch (RuntimeException e) {
-    //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-    //                 .body(new AuthResponse(null, null)); // Return an AuthResponse with nulls for token and userId
-    //     }
-    // }
-
-    // @PostMapping("/login")
-    // public String login(@RequestBody User user)
-    // {
-    //     System.out.println(user);
-    //     return authService.verify(user);
-    // }
-
 
     @Autowired
     private JWTService jwtservice;

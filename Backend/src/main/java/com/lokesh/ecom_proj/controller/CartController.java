@@ -15,7 +15,6 @@ import com.lokesh.ecom_proj.model.Product;
 import com.lokesh.ecom_proj.model.User;
 import com.lokesh.ecom_proj.repo.ProductRepo;
 import com.lokesh.ecom_proj.repo.UserRepo;
-// import com.lokesh.ecom_proj.exception.ResourceNotFoundException;
 
 @RestController
 @RequestMapping("/users")
@@ -49,7 +48,7 @@ public void updateCart(@PathVariable String userId, @RequestBody CartItem cartIt
             if (currentQuantity < product.getStockQuantity()) {
                 existingCartItem.get().setQuantity(currentQuantity + 1);
             } else {
-                throw new IllegalArgumentException("Not enough stock available."); // Throw an exception or return a response indicating failure
+                throw new IllegalArgumentException("Not enough stock available."); 
             }
         } else {
             if (product.getStockQuantity() > 0) {
@@ -114,7 +113,6 @@ public ResponseEntity<List<CartItemResponse>> getCart(@PathVariable String userI
     return ResponseEntity.ok(response);
 }
 @GetMapping("/quantity/{productid}/cart")
-// @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
 public int getQuantity(@PathVariable String productid) {
     System.out.println("Hello sirreh");
     System.out.println("Hi ednejn : "+productid);
@@ -129,8 +127,7 @@ public int getQuantity(@PathVariable String productid) {
     return 0;
 }
 
-// @Autowired
-// private CartItem cart;
+
 @GetMapping("/currentquantity/{userId}/{productid}/cart")
 public int getquantityfromcart(@PathVariable String userId, @PathVariable String productid) {
     System.out.println("USERID "+userId);
@@ -161,26 +158,6 @@ public int getquantityfromcart(@PathVariable String userId, @PathVariable String
         return 0;
     }
 }
-
-// @GetMapping("/{userId}/cart")
-// // @PreAuthorize("hasAuthority('USER') and #userId == authentication.principal.id")
-// public ResponseEntity<List<Product>> getCart(@PathVariable String userId) {
-//     User user = userRepository.findById(userId)
-//             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-//     System.out.println("User accessing cart: " + user.getUsername());
-//     System.out.println(user.getCart());
-
-//     // Fetch the product IDs from the user's cart
-//     List<String> productIds = user.getCart().stream()
-//             .map(CartItem::getProductId)
-//             .collect(Collectors.toList());
-
-//     // Fetch products from the ProductRepo based on the product IDs
-//     List<Product> products = productRepository.findAllById(productIds);
-//     // System.out.println(products);
-//     return ResponseEntity.ok(products);
-// }
 
     @DeleteMapping("/{userId}/cart/{productId}")
     public ResponseEntity<List<CartItem>> removeFromCart(@PathVariable String userId, @PathVariable String productId) {
