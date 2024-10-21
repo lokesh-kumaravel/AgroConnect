@@ -21,6 +21,9 @@ AgroConnect is an e-commerce platform designed to help users post and sell their
 
 6. **👤 Profile Maintenance**  
    Manage your personal profile, view order history, and update details with ease.
+   
+7. **🔒 Google OAuth Login**  
+   Securely log in to your account using Google OAuth, providing a seamless authentication experience.
 
 ## 🛠️ Getting Started
 
@@ -32,6 +35,16 @@ Before you begin, ensure you have the following installed:
 - **Java Spring Boot**: Backend services and API
 - **Node.js**: JavaScript runtime environment
 - **Maven**: Dependency management for Spring Boot
+
+### 🔑 Google OAuth Configuration
+
+To enable Google OAuth login, follow these steps to set up your Google Cloud project and obtain your client ID and secret. This configuration is essential for allowing users to securely log in with their Google accounts.
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a new project or select an existing one.
+3. Navigate to "Credentials" and create OAuth 2.0 credentials.
+4. Set the redirect URI to match your backend application's endpoint.
+5. Add your client ID and secret to the application properties of your Spring Boot backend.
 
 ### 📥 Installation
 
