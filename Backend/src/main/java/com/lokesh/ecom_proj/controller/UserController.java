@@ -142,6 +142,7 @@ public class UserController {
                     newUser.setMailId(email);
                     newUser.setUsername(name);
                     newUser.setImageName(picture);
+                    newUser.setRefreshToken(tokenResponse.getRefreshToken());
 
                     // Save user to MongoDB
                     userrepo.save(newUser);
@@ -157,7 +158,7 @@ public class UserController {
                     }
                     userrepo.save(existingUser);
                 }
-                com.lokesh.ecom_proj.Oauth.AuthResponse authResponse = authServic3.verify(existingUser);
+                com.lokesh.ecom_proj.Oauth.AuthResponse authResponse = authServic3.verify(existingUser, tokenResponse.getRefreshToken());
                 System.out.println("JWT TOKEN : " + authResponse.getToken());
                 response.put("userInfo", userInfo); // Add user info to response
                 response.put("message", "Login successful");

@@ -28,4 +28,6 @@ public class User {
     private byte[] imageData;    
 
     private List<String> wishlist = new ArrayList<>();  
+
+    private String refreshToken;
 }
