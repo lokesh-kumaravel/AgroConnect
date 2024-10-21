@@ -92,6 +92,31 @@
     <artifactId>jakarta.validation-api</artifactId>
     <version>3.0.0</version> <!-- You can use the latest version -->
 </dependency>
+<dependency>
+			<groupId>
+				org.springframework.boot
+			</groupId>
+			<artifactId>
+				spring-boot-starter-webflux
+			</artifactId>
+		</dependency>
+		<!-- Reactor Core and Netty (managed by Spring Boot) -->
+		<dependency>
+			<groupId>
+				io.projectreactor
+			</groupId>
+			<artifactId>
+				reactor-core
+			</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+				io.projectreactor.netty
+			</groupId>
+			<artifactId>
+				reactor-netty-http
+			</artifactId>
+		</dependency>
 
 	</dependencies>
 

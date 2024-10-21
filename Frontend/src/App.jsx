@@ -10,12 +10,13 @@ import { AppProvider } from "./Context/Context";
 import UpdateProduct from "./components/UpdateProduct";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Profile from "./components/Profile";
 import Wishlist from "./components/Wishlist";
+import Sessionhandler from "./Sessionhandler";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -43,26 +44,25 @@ function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <Navbar onSelectCategory={handleCategorySelect}
-         />
+        <Navbar onSelectCategory={handleCategorySelect} />
         <Routes>
           <Route
             path="/"
             element={
-              <Home addToCart={addToCart} selectedCategory={selectedCategory}
-              />
+              <Home addToCart={addToCart} selectedCategory={selectedCategory} />
             }
           />
-          <Route path="/add_product" element={<AddProduct />} />  
-          <Route path="/product" element={<Product  />} />
-          <Route path="product/:id" element={<Product  />} />
-        <Route path="/cart" element={<Cart />} />
+          <Route path="/add_product" element={<AddProduct />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="product/:id" element={<Product />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="/product/update/:id" element={<UpdateProduct />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/oauth/google" element={<Sessionhandler />}></Route>
         </Routes>
       </BrowserRouter>
     </AppProvider>
