@@ -21,7 +21,7 @@ const Sessionhandler = () => {
         console.log(response.data);
         const {
           userInfo: userInfoObject,
-          message: successMessage,
+          message: successMessage,    
           authResponse: authresponse,
         } = response.data;
         const email = userInfoObject.email;
