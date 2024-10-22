@@ -29,6 +29,7 @@ import com.lokesh.ecom_proj.service.AuthResponse;
 import com.lokesh.ecom_proj.service.AuthService;
 import com.lokesh.ecom_proj.service.JWTService;
 import com.lokesh.ecom_proj.service.MyUserDetailsService;
+import com.lokesh.ecom_proj.task.configurer;
 
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,9 +51,10 @@ public class UserController {
 
     @Value("${chronify.google.oauth.client_id}")
     private String clientId;
-
-    @Value("${chronify.google.oauth.client_secret}")
-    private String clientSecret;
+    
+    private String clientSecret = configurer.getGoogleClientSecret();
+    // @Value("${chronify.google.oauth.client_secret}")
+    // private String clientSecret;
 
     @Autowired
     private AuthService authService;

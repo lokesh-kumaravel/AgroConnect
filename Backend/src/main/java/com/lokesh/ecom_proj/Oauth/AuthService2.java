@@ -1,9 +1,13 @@
 package com.lokesh.ecom_proj.Oauth;
 
+import org.apache.logging.log4j.status.StatusLogger.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.lokesh.ecom_proj.task.configurer;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,8 +22,9 @@ public class AuthService2 {
     @Value("${chronify.google.oauth.client_id}")
     private String clientId;
 
-    @Value("${chronify.google.oauth.client_secret}")
-    private String clientSecret;
+    // @Value("${chronify.google.oauth.client_secret}")
+    // private String clientSecret;
+    private String clientSecret = configurer.getGoogleClientSecret();
 
     @Value("${chronify.google.oauth.redirect_uri}")
     private String redirectUri;
