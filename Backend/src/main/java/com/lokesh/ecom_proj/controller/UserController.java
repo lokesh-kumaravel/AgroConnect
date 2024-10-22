@@ -49,8 +49,10 @@ public class UserController {
     @Value("${chronify.google.oauth.auth_uri}")
     private String authUri;
 
-    @Value("${chronify.google.oauth.client_id}")
-    private String clientId;
+    // @Value("${chronify.google.oauth.client_id}")
+    // private String clientId;
+    
+    private String clientId = configurer.getGoogleClientKey();
     
     private String clientSecret = configurer.getGoogleClientSecret();
     // @Value("${chronify.google.oauth.client_secret}")

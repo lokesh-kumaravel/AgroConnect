@@ -19,12 +19,13 @@ public class AuthService2 {
     @Value("${chronify.google.oauth.token_uri}")
     private String tokenUri;
 
-    @Value("${chronify.google.oauth.client_id}")
-    private String clientId;
+    // @Value("${chronify.google.oauth.client_id}")
+    // private String clientId;
 
     // @Value("${chronify.google.oauth.client_secret}")
     // private String clientSecret;
     private String clientSecret = configurer.getGoogleClientSecret();
+    private String clientId = configurer.getGoogleClientKey();
 
     @Value("${chronify.google.oauth.redirect_uri}")
     private String redirectUri;
