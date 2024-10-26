@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 const Sessionhandler = () => {
   const code = new URLSearchParams(useLocation().search).get("code");
 
-  // State to hold user info, message, and error
   const [userInfo, setUserInfo] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");

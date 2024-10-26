@@ -309,8 +309,8 @@ const Navbar = ({ onSelectCategory, onSearch }) => {
                     left: '0%',
                     border: 'none',
                     width: '100%',
-                    textAlign: 'left', // Align text to the left
-                    padding: '7px', // Add padding for better appearance
+                    textAlign: 'left', 
+                    padding: '7px', 
                   }}
                 >
                     <span>{result.name}</span>

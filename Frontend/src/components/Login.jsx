@@ -48,13 +48,11 @@ function Login() {
   const handleGoogleLogin = async () => {
     try {
         console.log("Requesting Google login URL from backend...");
-        // alert("Requesting google login")
         const response = await axios.get('/login', { withCredentials: true });
-        // alert("After Requesting google login")
 
         if (response.status === 200) {
-            const googleLoginUrl = response.data.url; // Extract URL from the response
-            window.location.href = googleLoginUrl; // Redirect to Google login
+            const googleLoginUrl = response.data.url; 
+            window.location.href = googleLoginUrl;
         } else {
           alert("google login failed")
             console.error("Failed to get login URL:", response.status, response.data);
@@ -66,11 +64,11 @@ function Login() {
 
 const handleGoogleCallback = async (code) => {
   try {
-    console.log("Calling handleGoogleCallback with code:", code); // Log to confirm the code is received
+    console.log("Calling handleGoogleCallback with code:", code); 
     const response = await axios.get(`/oauth/google?code=${code}`);
 
     if (response.status === 200) {
-      console.log("Response from backend:", response.data); // Log the response
+      console.log("Response from backend:", response.data); 
       const userInfoString = response.data.userInfo.trim();
       const userInfo = JSON.parse(userInfoString);
       console.log("User email:", userInfo.email);
@@ -305,114 +303,8 @@ export default Login;
 // export default Login;
 
 // // http://192.168.77.227:8080/jwtcheck
-// import React, { useState, useContext } from "react";
-// import AppContext from "../Context/Context";
-// import { Link, useNavigate } from 'react-router-dom';
-// import axios from "../axiosProduct";
-// function Login() {
 
-//     const { setUserId,userId } = useContext(AppContext);
 
-//     const navigate = useNavigate();
-
-//     const [email, setEmail] = useState("lokesh@gmail.com");
-//     const [password, setPassword] = useState("123");
-//     const [error, setError] = useState(null);
-
-//     const handleLogin = async (e) => {
-//         e.preventDefault();
-//         console.log(email);
-//         console.log(password);
-
-//         const loginData = {
-//             mailId: email,
-//             password: password
-//         };
-
-//         try {
-//             const response = await axios.post('/login',loginData, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 // body: JSON.stringify(loginData),
-//             });
-
-//             // const data = await response.json(); // Parse the response
-//             const data = await response.data;
-
-//             if (response) {
-//                 const { token, userId } = data;
-//                 setUserId(userId);
-//                 console.log("Login successful. JWT Token: ", token);
-//                 console.log("UserId: ", userId);
-//                 localStorage.setItem("currentuser",userId)
-//                 localStorage.setItem('jwt', token);
-
-//                 navigate('/');
-//             } else {
-//                 const errorMessage = data?.message || "Login failed";
-//                 setError(errorMessage);
-//                 console.error   ("Login failed:", errorMessage);
-//             }
-//         } catch (error) {
-//             console.error("Error occurred during login:", error);
-//             setError("Invalid username or password");
-//         }
-//         window.location.reload()
-//     };
-
-//   return (
-//     <div style={{ textAlign: 'center', marginTop: '50px', padding:140}}>
-//             <h1 style={{color:'Green'}}>Login</h1>
-//             <form onSubmit={handleLogin}>
-//             <div style={{ margin: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-//     <i className="fa fa-envelope" style={{ marginRight: '10px', color: 'var(--icon-color)' }}></i>
-//     <input
-//         type="text"
-//         placeholder="Email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//         required
-//         style={{ padding: '10px', margin: '10px', width: '300px' }}
-//     />
-// </div>
-// <div style={{ margin: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-//     <i className="fa fa-lock" style={{ marginRight: '10px', color: 'var(--icon-color)' }}></i>
-//     <input
-//         type="password"
-//         placeholder="Password"
-//         value={password}
-//         onChange={(e) => setPassword(e.target.value)}
-//         required
-//         style={{ padding: '10px', margin: '10px', width: '300px' }}
-//     />
-// </div>
-
-//                 <button
-//                     type="submit"
-//                     style={{
-//                         padding: '10px 20px',
-//                         fontSize: '16px',
-//                         cursor: 'pointer',
-//                         backgroundColor: '#4285F4',
-//                         color: 'white',
-//                         border: 'none',
-//                         borderRadius: '5px'
-//                     }}
-//                 >
-//                     Login
-//                 </button>
-//             </form>
-//             {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
-//             <p>
-//                 Don't have an account? <Link to="/register">Register here</Link>
-//             </p>
-//         </div>
-//   );
-// }
-
-// export default Login;
 /*<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
