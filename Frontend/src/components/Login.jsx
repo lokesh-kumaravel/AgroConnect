@@ -47,47 +47,51 @@ function Login() {
   };
   const handleGoogleLogin = async () => {
     try {
-        console.log("Requesting Google login URL from backend...");
-        const response = await axios.get('/login', { withCredentials: true });
+      console.log("Requesting Google login URL from backend...");
+      const response = await axios.get("/login", { withCredentials: true });
 
-        if (response.status === 200) {
-            const googleLoginUrl = response.data.url; 
-            window.location.href = googleLoginUrl;
-        } else {
-          alert("google login failed")
-            console.error("Failed to get login URL:", response.status, response.data);
-        }
+      if (response.status === 200) {
+        const googleLoginUrl = response.data.url;
+        window.location.href = googleLoginUrl;
+      } else {
+        alert("google login failed");
+        console.error(
+          "Failed to get login URL:",
+          response.status,
+          response.data
+        );
+      }
     } catch (error) {
-        console.error("Error fetching Google login URL:", error);
+      console.error("Error fetching Google login URL:", error);
     }
-};
+  };
 
-const handleGoogleCallback = async (code) => {
-  try {
-    console.log("Calling handleGoogleCallback with code:", code); 
-    const response = await axios.get(`/oauth/google?code=${code}`);
+  const handleGoogleCallback = async (code) => {
+    try {
+      console.log("Calling handleGoogleCallback with code:", code);
+      const response = await axios.get(`/oauth/google?code=${code}`);
 
-    if (response.status === 200) {
-      console.log("Response from backend:", response.data); 
-      const userInfoString = response.data.userInfo.trim();
-      const userInfo = JSON.parse(userInfoString);
-      console.log("User email:", userInfo.email);
-    } else {
-      console.error("Google login failed:", response.data.error);
+      if (response.status === 200) {
+        console.log("Response from backend:", response.data);
+        const userInfoString = response.data.userInfo.trim();
+        const userInfo = JSON.parse(userInfoString);
+        console.log("User email:", userInfo.email);
+      } else {
+        console.error("Google login failed:", response.data.error);
+      }
+    } catch (error) {
+      console.error("Error during Google login callback:", error);
     }
-  } catch (error) {
-    console.error("Error during Google login callback:", error);
-  }
-};
+  };
 
-useEffect(() => {
-  const queryParams = new URLSearchParams(window.location.search);
-  const code = queryParams.get("code");
-  console.log("Google OAuth Code:", code);
-  if (code) {
-    handleGoogleCallback(code);
-  }
-}, []);
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const code = queryParams.get("code");
+    console.log("Google OAuth Code:", code);
+    if (code) {
+      handleGoogleCallback(code);
+    }
+  }, []);
 
   return (
     <>
@@ -138,11 +142,57 @@ useEffect(() => {
             {/* Login Button */}
             <input className="login-button" type="submit" value="Sign In" />
           </form>
-          <div className="social-account-container">
+          <button
+  className="gsi-material-button"
+  onClick={handleGoogleLogin}
+  style={{
+    fontFamily:'times-new-roman',
+    width: '200px', // Set desired width
+    height: '50px', // Set desired height
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+    border: 'none',
+    borderRadius: '30px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    transition: 'background-color 0.3s, transform 0.3s', // Added transform transition
+    // backgroundColor: '#4285F4', 
+  }}
+  onMouseOver={(e) => {
+    // e.currentTarget.style.backgroundColor = '#357ae8'; 
+    e.currentTarget.style.transform = 'scale(1.05)'; 
+  }}
+  onMouseOut={(e) => {
+    // e.currentTarget.style.backgroundColor = '#4285F4';
+    e.currentTarget.style.transform = 'scale(1)';
+  }}
+>
+  <div className="gsi-material-button-icon">
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 48 48"
+      style={{ display: 'block', width: '24px', height: '24px' }} // Set icon size
+    >
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+      <path fill="none" d="M0 0h48v48H0z"></path>
+    </svg>
+  </div>
+  <span className="gsi-material-button-contents">Sign in with Google</span>
+</button>
+
+          {/* <div className="social-account-container">
             <span className="title">Or Sign in with</span>
             <div className="social-accounts">
-              <button className="social-button google" onClick={handleGoogleLogin}>
-                {/* Google SVG Icon */}
+              <button
+                className="social-button google"
+                onClick={handleGoogleLogin}
+              >
                 <svg
                   className="svg"
                   xmlns="http:www.w3.org/2000/svg"
@@ -153,7 +203,6 @@ useEffect(() => {
                 </svg>
               </button>
               <button className="social-button apple">
-                {/* Apple SVG Icon */}
                 <svg
                   className="svg"
                   xmlns="http:www.w3.org/2000/svg"
@@ -164,7 +213,6 @@ useEffect(() => {
                 </svg>
               </button>
               <button className="social-button twitter">
-                {/* Twitter SVG Icon */}
                 <svg
                   className="svg"
                   xmlns="http:www.w3.org/2000/svg"
@@ -175,7 +223,7 @@ useEffect(() => {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* <div>
@@ -303,7 +351,6 @@ export default Login;
 // export default Login;
 
 // // http://192.168.77.227:8080/jwtcheck
-
 
 /*<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
