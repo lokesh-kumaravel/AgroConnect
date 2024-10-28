@@ -53,36 +53,4 @@ public class AuthService3 {
             throw new RuntimeException("User Not Found");
         }
     }
-
-    // @Autowired
-    // private JWTService jwtservice;
-    // public AuthResponse verify(User user, String refreshToken) {
-    // if(user==null)
-    // {
-    // System.out.println("user cannpot be null");
-    // }
-    // User foundUser = repo.findByMailId(user.getMailId());
-    // if (foundUser != null) {
-    // if (user.getUsername().equals(foundUser.getUsername())) {
-    // String token = jwtservice.generateToken(foundUser.getUsername());
-    // System.out.println(token);
-    // System.out.println(foundUser.getId());
-
-    // return new AuthResponse(token, foundUser.getId(), refreshToken);
-    // } else {
-    // throw new RuntimeException("Bad Credentials");
-    // }
-    // } else {
-    // throw new RuntimeException("User Not Found");
-    // }
-    // }
-
-    // @Autowired
-    // private UserRepo userRepository;
-
-    // public User findById(String userId) {
-    // return userRepository.findById(userId)
-    // .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    // }
-
 }

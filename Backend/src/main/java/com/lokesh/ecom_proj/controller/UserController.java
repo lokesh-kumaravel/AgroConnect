@@ -35,7 +35,6 @@ import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.*;
 
-// import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -197,7 +196,6 @@ public class UserController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Handle the exception (e.g., log it or return null)
             return null;
         } 
     }

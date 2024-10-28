@@ -149,8 +149,6 @@ public int getquantityfromcart(@PathVariable String userId, @PathVariable String
     }
     if(index>=0)
     {
-        // System.out.println(cart.get((index)));
-        // System.out.println(cart.get(index).getQuantity());
         return cart.get(index).getQuantity();
     }
     else
