@@ -16,6 +16,7 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Profile from "./components/Profile";
 import Wishlist from "./components/Wishlist";
+// import Footer from "./components/Footer";
 import Sessionhandler from "./Sessionhandler";
 
 function App() {
@@ -64,6 +65,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/oauth/google" element={<Sessionhandler />}></Route>
         </Routes>
+        {/* <Footer /> */}
       </BrowserRouter>
     </AppProvider>
   );
