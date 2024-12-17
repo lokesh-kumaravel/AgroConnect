@@ -102,6 +102,12 @@
     <artifactId>aws-java-sdk-core</artifactId>
     <version>1.12.300</version>
 </dependency>
+<dependency>
+    <groupId>com.stripe</groupId>
+    <artifactId>stripe-java</artifactId>
+    <version>28.2.0-beta.4</version>
+</dependency>
+
 
 <dependency>
 			<groupId>

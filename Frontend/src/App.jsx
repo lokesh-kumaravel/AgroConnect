@@ -16,6 +16,8 @@ import Login from "./components/Login";
 import Logout from "./components/Logout";
 import Profile from "./components/Profile";
 import Wishlist from "./components/Wishlist";
+import Success from "./components/SuccessPage";
+import Failure from "./components/FailurePage";
 // import Footer from "./components/Footer";
 import Sessionhandler from "./Sessionhandler";
 
@@ -63,6 +65,8 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/failure" element={<Error />} />
           <Route path="/oauth/google" element={<Sessionhandler />}></Route>
         </Routes>
         {/* <Footer /> */}
