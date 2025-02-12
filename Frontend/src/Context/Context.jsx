@@ -1,6 +1,6 @@
 import axioss from "../axios";
-import { useState, useEffect, createContext } from "react"; 
-// import { useNavigate } from 'react-router-dom'; 
+import { useState, useEffect, createContext } from "react";
+// import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 const AppContext = createContext({
   // username: "",
@@ -18,15 +18,17 @@ const AppContext = createContext({
 });
 
 export const AppProvider = ({ children }) => {
-  // const navigate = useNavigate(); 
+  // const navigate = useNavigate();
   const [username, setUsername] = useState(null);
   const [data, setData] = useState([]);
   const [isError, setIsError] = useState("");
-  const [cart, setCart] = useState(JSON.parse(localStorage.getItem('cart')) || []);
+  const [cart, setCart] = useState(
+    JSON.parse(localStorage.getItem("cart")) || []
+  );
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem('currentuser');
+    const storedUserId = localStorage.getItem("currentuser");
     if (storedUserId) {
       setUserId(storedUserId);
     }
@@ -43,7 +45,7 @@ export const AppProvider = ({ children }) => {
   //         'Content-Type': 'application/json',
   //       },
   //     });
-  
+
   //     if (response.ok) {
   //       const data = await response.text();
   //       console.log(data);
@@ -54,7 +56,7 @@ export const AppProvider = ({ children }) => {
   //     console.error('Error fetching username:', error);
   //   }
   // };
-  
+
   // const fetchUsername = async (userId) => {
   //   try {
   //     const token = localStorage.getItem('jwt');
@@ -79,11 +81,15 @@ export const AppProvider = ({ children }) => {
     const cartItem = { productId: product.id, quantity: 1 };
 
     try {
-      const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem("jwt");
       if (token) {
-        const response = await axios.put(`http://172.16.2.211:8080/users/${userId}/cart`, cartItem, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.put(
+          `http://localhost:8080/users/${userId}/cart`,
+          cartItem,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         if (response.status >= 200 && response.status < 300) {
           setCart(response.data.cart);
           return true;
@@ -104,7 +110,9 @@ export const AppProvider = ({ children }) => {
       return;
     }
     try {
-      const response = await axioss.delete(`/users/${userId}/cart/${productId}`);
+      const response = await axioss.delete(
+        `/users/${userId}/cart/${productId}`
+      );
       setCart(response.data.cart);
     } catch (error) {
       console.error("Error removing from cart", error);
@@ -127,8 +135,8 @@ export const AppProvider = ({ children }) => {
 
   const logout = () => {
     setUserId(null);
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('currentuser');
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("currentuser");
   };
 
   useEffect(() => {
@@ -136,13 +144,16 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem("jwt");
     if (userId && token) {
       const fetchCart = async (userId) => {
         try {
-          const response = await axios.get(`http://172.16.2.211:8080/users/${userId}/cart`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+          const response = await axios.get(
+            `http://localhost:8080/users/${userId}/cart`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           setCart(response.data.cart);
         } catch (error) {
           console.error("Error fetching cart", error);
@@ -153,7 +164,22 @@ export const AppProvider = ({ children }) => {
   }, [userId]);
 
   return (
-    <AppContext.Provider value={{ data, isError, cart, addToCart, removeFromCart, refreshData, clearCart, userId, setUserId, logout, username, setUsername }}>
+    <AppContext.Provider
+      value={{
+        data,
+        isError,
+        cart,
+        addToCart,
+        removeFromCart,
+        refreshData,
+        clearCart,
+        userId,
+        setUserId,
+        logout,
+        username,
+        setUsername,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );
@@ -161,23 +187,9 @@ export const AppProvider = ({ children }) => {
 
 export default AppContext;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import axios from "../axios";
-// import { useState, useEffect, createContext } from "react"; 
-// import { useNavigate } from 'react-router-dom'; 
+// import { useState, useEffect, createContext } from "react";
+// import { useNavigate } from 'react-router-dom';
 // const AppContext = createContext({
 //   username: null,
 //   setUsername: (name) => {},
@@ -260,10 +272,6 @@ export default AppContext;
 //     }
 // };
 
-
-
-
-
 //   const removeFromCart = async (productId) => {
 //     if (!userId) {
 //       console.error("User ID is null, cannot remove from cart.");
@@ -319,7 +327,7 @@ export default AppContext;
 //             console.error("Error fetching cart", error);
 //         }
 //     };
-    
+
 //       var id = localStorage.getItem("currentuser")
 //       fetchCart(id);
 //     }

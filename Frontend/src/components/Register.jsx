@@ -18,7 +18,7 @@ const Register = () => {
       password: password,
     };
     try {
-      const response = await fetch("http://172.16.2.211:8080/register", {
+      const response = await fetch("http://localhost:8080/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

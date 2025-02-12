@@ -4,15 +4,23 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "../Context/Context";
 import axios from "../axiosProduct";
 import GooglePayButton from "@google-pay/button-react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import ReviewComponent from "./ReviewComponent";
 import "./Product.css";
-import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, WhatsappIcon, } from 'react-share';
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+} from "react-share";
 import InstagramIcon from "../assets/unplugged.png";
 
 const Product = () => {
   const { id } = useParams();
-  const { addToCart, removeFromCart, refreshData, userId } = useContext(AppContext);
+  const { addToCart, removeFromCart, refreshData, userId } =
+    useContext(AppContext);
   const [product, setProduct] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
@@ -34,7 +42,9 @@ const Product = () => {
     };
 
     const fetchImage = async () => {
-      const response = await axios.get(`/api/product/${id}/image`, { responseType: "blob" });
+      const response = await axios.get(`/api/product/${id}/image`, {
+        responseType: "blob",
+      });
       setImageUrl(URL.createObjectURL(response.data));
     };
 
@@ -47,11 +57,15 @@ const Product = () => {
     if (!product || curUserId === product.userId) return;
 
     try {
-      const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem("jwt");
       if (token) {
-        await axios.post(`/api/products/${id}/view`, {}, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await axios.post(
+          `/api/products/${id}/view`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
       }
     } catch (error) {
       console.error("Error incrementing view count:", error);
@@ -81,9 +95,9 @@ const Product = () => {
   };
 
   const handleAddToCart = async (productId, product) => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem("jwt");
     if (!token) {
-      navigate('/login');
+      navigate("/login");
       return alert("User not logged in");
     }
 
@@ -108,16 +122,16 @@ const Product = () => {
     //   }
     // }
     try {
-      const response = await fetch('http://172.16.2.211:8080/jwtcheck', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/jwtcheck", {
+        method: "POST",
         headers: {
-          'Authorization': 'Bearer ' + token,
+          Authorization: "Bearer " + token,
         },
       });
 
       if (!response.ok) {
         console.error("Invalid token, redirecting to login.");
-        navigate('/login');
+        navigate("/login");
         return;
       }
       const res = await addToCart(product);
@@ -126,9 +140,10 @@ const Product = () => {
       } else {
         alert("Out of Stock!");
       }
-    } 
-    catch (error) {
-      const errorMessage = error.response?.data?.message || "Failed to add product to cart. Please try again.";
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to add product to cart. Please try again.";
       alert(errorMessage);
       console.error("Error adding to cart", error);
     }
@@ -141,92 +156,113 @@ const Product = () => {
   if (!product) {
     return <h2 className="text-center my-5">Product not found.</h2>;
   }
-  const instagramShareUrl = `https://www.instagram.com/?url=${encodeURIComponent(window.location.href)}`;
+  const instagramShareUrl = `https://www.instagram.com/?url=${encodeURIComponent(
+    window.location.href
+  )}`;
   const curid = localStorage.getItem("currentuser");
-  const shareUrl = window.location.href; 
+  const shareUrl = window.location.href;
   const title = product.name;
   return (
     <div className="row align-items-start">
-  <div className="col-md-4 d-flex justify-content-center" style={{ minHeight: '300px' }}>
-    <img 
-      className="img-fluid" 
-      src={imageUrl} 
-      alt={product.imageName} 
-      style={{ objectFit: 'cover', width: '100%' }} 
-    />
-  </div>
-  {/* ///////////////////// */}
-  <div className="col-md-5">
-  {/* Product Details Section */}
-  <div className="product-description">
-    <h1 className="h3 text-capitalize" style={{ color: "red" }}>{product.name}</h1>
-    <span className="text-muted">{product.category}</span>
-    <p className="release-date">
-      <small>Listed: <i>{new Date(product.releaseDate).toLocaleDateString()}</i></small>
-    </p>
-    <i className="text-muted">{product.brand}</i>
-    <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
-    <p>{product.description}</p>
-  </div>
-  <div className="product-price mt-3">
-    <span className="h4">₹{product.price}</span>
-    <div className="share-buttons">
-      <FacebookShareButton url={shareUrl} quote={title}>
-        <FacebookIcon size={32} round />
-      </FacebookShareButton>
-      <TwitterShareButton url={shareUrl} title={title}>
-        <TwitterIcon size={32} round />
-      </TwitterShareButton>
-      <WhatsappShareButton url={shareUrl} title={title}>
-        <WhatsappIcon size={32} round />
-      </WhatsappShareButton>
-      <a href={instagramShareUrl} target="_blank" rel="noopener noreferrer">
-        <img src={InstagramIcon} alt="Share on Instagram" style={{ width: 32, height: 32, borderRadius: '50%' }} />
-      </a>
-    </div>
+      <div
+        className="col-md-4 d-flex justify-content-center"
+        style={{ minHeight: "300px" }}
+      >
+        <img
+          className="img-fluid"
+          src={imageUrl}
+          alt={product.imageName}
+          style={{ objectFit: "cover", width: "100%" }}
+        />
+      </div>
+      {/* ///////////////////// */}
+      <div className="col-md-5">
+        {/* Product Details Section */}
+        <div className="product-description">
+          <h1 className="h3 text-capitalize" style={{ color: "red" }}>
+            {product.name}
+          </h1>
+          <span className="text-muted">{product.category}</span>
+          <p className="release-date">
+            <small>
+              Listed:{" "}
+              <i>{new Date(product.releaseDate).toLocaleDateString()}</i>
+            </small>
+          </p>
+          <i className="text-muted">{product.brand}</i>
+          <p className="font-weight-bold mt-2">PRODUCT DESCRIPTION:</p>
+          <p>{product.description}</p>
+        </div>
+        <div className="product-price mt-3">
+          <span className="h4">₹{product.price}</span>
+          <div className="share-buttons">
+            <FacebookShareButton url={shareUrl} quote={title}>
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <TwitterShareButton url={shareUrl} title={title}>
+              <TwitterIcon size={32} round />
+            </TwitterShareButton>
+            <WhatsappShareButton url={shareUrl} title={title}>
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+            <a
+              href={instagramShareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={InstagramIcon}
+                alt="Share on Instagram"
+                style={{ width: 32, height: 32, borderRadius: "50%" }}
+              />
+            </a>
+          </div>
 
-    <h6 className="mt-2">
-      Stock Available: <span className="text-success font-weight-bold">{product.stockQuantity}</span>
-    </h6>
-    <GooglePayButton
-  environment="PRODUCTION"
-  paymentRequest={{
-    apiVersion: 2,
-    apiVersionMinor: 0,
-    allowedPaymentMethods: [
-      {
-        type: 'CARD',
-        parameters: {
-          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-          allowedCardNetworks: ['MASTERCARD', 'VISA'],
-        },
-        tokenizationSpecification: {
-          type: 'PAYMENT_GATEWAY',
-          parameters: {
-            gateway: 'stripe', // e.g., 'stripe'
-            gatewayMerchantId: 'yourActualGatewayMerchantId',
-          },
-        },
-      },
-    ],
-    merchantInfo: {
-      merchantId: 'yourActualGooglePayMerchantId',
-      merchantName: 'Your Actual Merchant Name',
-    },
-    transactionInfo: {
-      totalPriceStatus: 'FINAL',
-      totalPriceLabel: 'Total',
-      totalPrice: '1.00', // Replace with actual price
-      currencyCode: 'INR', // Replace with actual currency code
-      countryCode: 'IN', // Replace with actual country code
-    },
-  }}
-  onLoadPaymentData={paymentRequest => {
-    console.log('load payment data', paymentRequest);
-  }}
-/>
+          <h6 className="mt-2">
+            Stock Available:{" "}
+            <span className="text-success font-weight-bold">
+              {product.stockQuantity}
+            </span>
+          </h6>
+          <GooglePayButton
+            environment="PRODUCTION"
+            paymentRequest={{
+              apiVersion: 2,
+              apiVersionMinor: 0,
+              allowedPaymentMethods: [
+                {
+                  type: "CARD",
+                  parameters: {
+                    allowedAuthMethods: ["PAN_ONLY", "CRYPTOGRAM_3DS"],
+                    allowedCardNetworks: ["MASTERCARD", "VISA"],
+                  },
+                  tokenizationSpecification: {
+                    type: "PAYMENT_GATEWAY",
+                    parameters: {
+                      gateway: "stripe", // e.g., 'stripe'
+                      gatewayMerchantId: "yourActualGatewayMerchantId",
+                    },
+                  },
+                },
+              ],
+              merchantInfo: {
+                merchantId: "yourActualGooglePayMerchantId",
+                merchantName: "Your Actual Merchant Name",
+              },
+              transactionInfo: {
+                totalPriceStatus: "FINAL",
+                totalPriceLabel: "Total",
+                totalPrice: "1.00", // Replace with actual price
+                currencyCode: "INR", // Replace with actual currency code
+                countryCode: "IN", // Replace with actual country code
+              },
+            }}
+            onLoadPaymentData={(paymentRequest) => {
+              console.log("load payment data", paymentRequest);
+            }}
+          />
 
-    {/* <GooglePayButton
+          {/* <GooglePayButton
         environment="PRODUCTION"
         paymentRequest={{
           apiVersion: 2,
@@ -272,41 +308,57 @@ const Product = () => {
         buttonColor='black'
         buttonType='Buy'
       /> */}
-    <div className="text-center mt-3"> 
-      {product.userId !== curid && (
-        <button
-          className={`btn btn-primary ${!product.productAvailable ? "disabled" : ""}`}
-          onClick={() => handleAddToCart(product.id, product)}
-          disabled={!product.productAvailable}
-          style={{
-            width: '100%',
-            fontWeight: 'bold',
-            color: "white",
-            padding: '15px',
-            borderRadius: '20px',
-            border: 'none',
-            transition: 'all 0.2s ease-in-out'
-          }}
-        >
-          {product.productAvailable ? "Add to cart" : "Out of Stock"}
-        </button>
-      )}
-      {product.userId === curid && (
-        <div className="mt-2 d-flex justify-content-center">
-          <button className="btn btn-warning me-2" style={{ backgroundColor: 'orange' }} onClick={handleEditClick}>Update</button>
-          <button className="btn btn-danger" style={{ backgroundColor: 'red' }} onClick={deleteProduct}>Delete</button>
+          <div className="text-center mt-3">
+            {product.userId !== curid && (
+              <button
+                className={`btn btn-primary ${
+                  !product.productAvailable ? "disabled" : ""
+                }`}
+                onClick={() => handleAddToCart(product.id, product)}
+                disabled={!product.productAvailable}
+                style={{
+                  width: "100%",
+                  fontWeight: "bold",
+                  color: "white",
+                  padding: "15px",
+                  borderRadius: "20px",
+                  border: "none",
+                  transition: "all 0.2s ease-in-out",
+                }}
+              >
+                {product.productAvailable ? "Add to cart" : "Out of Stock"}
+              </button>
+            )}
+            {product.userId === curid && (
+              <div className="mt-2 d-flex justify-content-center">
+                <button
+                  className="btn btn-warning me-2"
+                  style={{ backgroundColor: "orange" }}
+                  onClick={handleEditClick}
+                >
+                  Update
+                </button>
+                <button
+                  className="btn btn-danger"
+                  style={{ backgroundColor: "red" }}
+                  onClick={deleteProduct}
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
-  </div>
-</div>
-      
-      <div className="col-md-3">
-    {/* Review Component */}
-    <ReviewComponent productId={product.id} productOwnerId={product.userId}/>
       </div>
-   </div>
 
+      <div className="col-md-3">
+        {/* Review Component */}
+        <ReviewComponent
+          productId={product.id}
+          productOwnerId={product.userId}
+        />
+      </div>
+    </div>
   );
 };
 
@@ -405,7 +457,7 @@ export default Product;
 //       {
 //         navigate('/login')
 //         return alert("User not logged in");
-//       } 
+//       }
 
 //     try {
 //       const productResponse = await axios.get(`/users/quantity/${productId}/cart`);
@@ -468,7 +520,7 @@ export default Product;
 //             {product.userId !== curid && ( // Show the button only if the user is not the owner
 //     <button
 //       className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-//       onClick={() => handleAddToCart(product.id, product)}  
+//       onClick={() => handleAddToCart(product.id, product)}
 //       disabled={!product.productAvailable}
 //       style={{
 //         padding: "1rem 2rem",
@@ -487,7 +539,7 @@ export default Product;
 
 //             {/* <button
 //               className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-//               onClick={() => handleAddToCart(product.id, product)}  
+//               onClick={() => handleAddToCart(product.id, product)}
 //               disabled={!product.productAvailable}
 //               style={{
 //                 padding: "1rem 2rem",
@@ -567,7 +619,7 @@ export default Product;
 //           </div>
 
 //           {/* Conditionally render Edit and Delete buttons */}
-//           {product.userId === curid && ( 
+//           {product.userId === curid && (
 //             <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
 //               <button
 //                 className="btn btn-primary"
@@ -701,20 +753,20 @@ export default Product;
 //   //   const amount = product.price; // Set the amount dynamically
 //   //   const transactionId = `txn_${new Date().getTime()}`; // Generate a unique transaction ID
 //   //   const name = "Store"; // You can replace this with your store name
-  
+
 //   //   // UPI payment link for QR code and deep link
 //   //   const upiPaymentLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&mc=&tid=${transactionId}&am=${amount}&tn=Payment for ${product.name}`;
-  
+
 //   //   // Detect mobile devices
 //   //   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
+
 //   //   if (isMobile) {
 //   //     // Redirect to Google Pay using deep link on mobile
 //   //     window.open(`gpay://upi/pay?pa=${upiId}&pn=${encodeURIComponent(name)}&mc=&tid=${transactionId}&am=${amount}&tn=Payment for ${product.name}`, '_blank');
 //   //   } else {
 //   //     // On desktop, generate a QR code and display it
 //   //     const qrCanvas = document.getElementById('qrCodeCanvas'); // Ensure this is a canvas element
-  
+
 //   //     // Generate the QR code for UPI payment
 //   //     try {
 //   //       await QRCode.toCanvas(qrCanvas, upiPaymentLink, { width: 256 });
@@ -724,7 +776,6 @@ export default Product;
 //   //     }
 //   //   }
 //   // };
-  
 
 //   if (!product) {
 //     return <h2 className="text-center" style={{ padding: "10rem" }}>Loading...</h2>;
@@ -734,7 +785,7 @@ export default Product;
 //     <>
 //       <div className="containers" style={{ display: "flex" }}>
 //         <img className="left-column-img" src={imageUrl} alt={product.imageName} style={{ width: "50%", height: "auto" }} />
-        
+
 //         <div className="right-column" style={{ width: "50%" }}>
 //           <div className="product-description">
 //             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -754,7 +805,7 @@ export default Product;
 //             <span style={{ fontSize: "2rem", fontWeight: "bold" }}>₹{product.price}</span>
 //             <button
 //               className={`cart-btn ${!product.productAvailable ? "disabled-btn" : ""}`}
-//               onClick={() => handleAddToCart(product.id, product)}  
+//               onClick={() => handleAddToCart(product.id, product)}
 //               disabled={!product.productAvailable}
 //               style={{
 //                 padding: "1rem 2rem",
@@ -841,7 +892,7 @@ export default Product;
 //           </div>
 
 //           {/* Conditionally render Edit and Delete buttons */}
-//           {product.userId === curid && ( 
+//           {product.userId === curid && (
 //             <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
 //               <button
 //                 className="btn btn-primary"
@@ -915,7 +966,7 @@ export default Product;
 // //       const response = await axios.get(`http://localhost:8080/api/product/${id}/image`, { responseType: "blob" });
 // //       setImageUrl(URL.createObjectURL(response.data));
 // //     };
-    
+
 // //     fetchProduct();
 // //   }, [id]);
 // //   const curid = localStorage.getItem("currentuser")
@@ -977,7 +1028,7 @@ export default Product;
 // //     <>
 // //       <div className="containers" style={{ display: "flex" }}>
 // //         <img className="left-column-img" src={imageUrl} alt={product.imageName} style={{ width: "50%", height: "auto" }} />
-        
+
 // //         <div className="right-column" style={{ width: "50%" }}>
 // //           <div className="product-description">
 // //             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -1022,7 +1073,7 @@ export default Product;
 // //               {/* console.log("Pro: "+product.userId) */}
 // //               {/* {console.log("product id"+product.userId)}
 // //               {console.log("user id"+curid)} */}
-// //           {product.userId ==  curid&& ( 
+// //           {product.userId ==  curid&& (
 // //             <div className="update-button" style={{ display: "flex", gap: "1rem" }}>
 // //               <button
 // //                 className="btn btn-primary"
@@ -1057,7 +1108,7 @@ export default Product;
 // //                 Delete
 // //               </button>
 // //             </div>
-// //            )} 
+// //            )}
 // //         </div>
 // //       </div>
 // //     </>
@@ -1065,14 +1116,3 @@ export default Product;
 // // };
 
 // // export default Product;
-
-
-
-
-
-
-
-
-
-
-
